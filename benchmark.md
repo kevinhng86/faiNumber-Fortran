@@ -12,6 +12,8 @@ of Fortran(from gfortran's -std=legacy to f2003) were tested lightly and
 did show to operate at almost similar or as the same speed as the
 benchmark score below.
 
+This is a general benchmark, and is for version 1n.0.0.f
+
 ###### CPU: AMD® A10-7800 radeon r7, 12 compute cores 4c+8g × 4
 ###### OS: Ubuntu 18.04.1 LTS
 ###### Compiler: gfortran 8
