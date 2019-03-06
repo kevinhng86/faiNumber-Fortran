@@ -55,3 +55,6 @@ especially true for any assume**** procedures that provide by this library.
 
 ## License
 <a href="https://github.com/kevinhng86/faiNumber-Fortran/blob/master/LICENSE">MIT</a>
+
+## Version Note
+Procedures of this version are not or may not be pure procedures.
