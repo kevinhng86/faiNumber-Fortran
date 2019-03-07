@@ -20,8 +20,8 @@
 ! CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 ! SOFTWARE.
 
-! This test file test fnBinaryUtil plus the int64ToBinaryAsU and the 
-! int64ToBinary function
+! This test file test fnBinaryUtil plus the int128ToBinaryAsU and the 
+! int128ToBinary function
 integer(k_int32) function getRandom32 (minimum, maximum)
     use fnConsts
     implicit none
@@ -34,34 +34,34 @@ integer(k_int32) function getRandom32 (minimum, maximum)
     getRandom32 =  int(rn) + minimum
 end function
 
-program fnBinaryUtil64Test
+program fnBinaryUtil128Test
     implicit none
     logical  ::  error
     
-    call binaryToInt64Test(error)
+    call binaryToInt128Test(error)
     if ( error ) stop
-    call binaryToInt64TrueErrorTest(error)
+    call binaryToInt128TrueErrorTest(error)
     if ( error ) stop
-    call binaryCompareAsInt64Test(error)
+    call binaryCompareAsInt128Test(error)
     if ( error ) stop
-    call binaryInt64OrSmallerTest(error)
+    call binaryInt128OrSmallerTest(error)
     if ( error ) stop
 end program
 
-subroutine binaryToInt64Test(error)
-    use fnBinaryUtil64
-    use fnInt64Util
+subroutine binaryToInt128Test(error)
+    use fnBinaryUtil128
+    use fnInt128Util
     implicit none
     character(len=2)   , parameter         ::  lf = char(10) // char(13)
-    character(len=*)   , parameter         ::  testName = "binaryToInt64Test"
-    integer(k_int32)   , parameter         ::  rCase = 10000000, slen = 130
-    integer(k_int32)   , parameter         ::  maxdigit = 1, maxlen = 64
+    character(len=*)   , parameter         ::  testName = "binaryToInt128Test"
+    integer(k_int32)   , parameter         ::  rCase = 10000000, slen = 150
+    integer(k_int32)   , parameter         ::  maxdigit = 1, maxlen = 128
     logical            , intent(out)       ::  error
     character(len=slen)                    ::  nString
-    character(len=64)                      ::  bString
-    character(len=65)                      ::  bString2
+    character(len=128)                     ::  bString
+    character(len=129)                     ::  bString2
     integer(k_int32)                       ::  getRandom32, i, i2, start, nlen, llen
-    integer(k_int64)                       ::  n1, n2
+    integer(k_int128)                      ::  n1, n2
     character(len=slen), dimension(rCase)  ::  nStringArray
     logical                                ::  errorLogical
     error = .TRUE.
@@ -99,7 +99,7 @@ subroutine binaryToInt64Test(error)
     do while( i <= rCase )
 
         nString = ADJUSTL(nStringArray(i))
-        call binaryToInt64(TRIM(nString), n1, errorLogical)
+        call binaryToInt128(TRIM(nString), n1, errorLogical)
         if ( errorLogical .eqv. .TRUE. ) then
             print *, "Test Failed. Error reported."
             print *, nStringArray(i)
@@ -107,17 +107,17 @@ subroutine binaryToInt64Test(error)
             return 
         end if
         
-        if ( n1 > -1_k_int64 ) then
-            bString2 = int64ToBinary(n1)    
-            if ( bString2(65:65) == charspace ) then
+        if ( n1 > -1_k_int128 ) then
+            bString2 = int128ToBinary(n1)    
+            if ( bString2(129:129) == charspace ) then
                 print *, "Something is wrong with the binary function"
                 print *, n1, lf, bString2
                 return
             end if
             nString = ADJUSTL(bString2)
         else 
-            bString = int64ToBinaryAsU(n1)
-            if ( bString(64:64) == charspace ) then
+            bString = int128ToBinaryAsU(n1)
+            if ( bString(128:128) == charspace ) then
                 print *, "Something is wrong with the binary function"
                 print *, n1, lf, bString
                 return
@@ -125,7 +125,7 @@ subroutine binaryToInt64Test(error)
             nString = ADJUSTL(bString)
         end if
         
-        call binaryToInt64(TRIM(nString), n2, errorLogical)
+        call binaryToInt128(TRIM(nString), n2, errorLogical)
         if ( errorLogical .eqv. .TRUE. ) then
             print *, "Test Failed. Error reported."
             print *, nStringArray(i)
@@ -142,38 +142,44 @@ subroutine binaryToInt64Test(error)
         
         i = i + 1
     end do 
-    ! 9223372036854775807
-    call binaryToInt64("111111111111111111111111111111111111111111111111111111111111111", n1, errorLogical)
+    ! 170,141,183,460,469,231,731,687,303,715,884,105,727
+    call binaryToInt128("1111111111111111111111111111111111111" &
+                     // "1111111111111111111111111111111111111" & 
+                     // "1111111111111111111111111111111111111" & 
+                     // "1111111111111111", n1, errorLogical)
     if ( errorLogical .eqv. .TRUE. ) then
-        print *, "Test Failed. Logical fail value(9223372036854775807_k_int64)."
+        print *, "Test Failed. Logical fail value(170141183460469231731687303715884105727)."
         print *, n1
         return 
     end if
-    if ( n1 /= 9223372036854775807_k_int64 ) then
-        print *, "Test Failed. Parsing not match value(9223372036854775807_k_int64)."
+    if ( n1 /= 170141183460469231731687303715884105727_k_int128 ) then
+        print *, "Test Failed. Parsing not match value(170141183460469231731687303715884105727)."
         print *, n1 
         return 
     end if
     ! -1
-    call binaryToInt64("1111111111111111111111111111111111111111111111111111111111111111", n1, errorLogical)
+    call binaryToInt128("1111111111111111111111111111111111111" &
+                     // "1111111111111111111111111111111111111" &
+                     // "1111111111111111111111111111111111111" & 
+                     // "11111111111111111", n1, errorLogical)
     if ( errorLogical .eqv. .TRUE. ) then
         print *, "Test Failed. Logical fail value(-1)."
         print *, n1
         return 
     end if
-    if ( n1 /= -1_k_int64 ) then
+    if ( n1 /= -1_k_int128 ) then
         print *, "Test Failed. Parsing not match value(-1)."
         print *, n1 
         return 
     end if
     ! 0 
-    call binaryToInt64("0", n1, errorLogical)
+    call binaryToInt128("0", n1, errorLogical)
     if ( errorLogical .eqv. .TRUE. ) then
         print *, "Test Failed. Logical fail value(0)."
         print *, n1
         return 
     end if
-    if ( n1 /= 0_k_int64 ) then
+    if ( n1 /= 0_k_int128 ) then
         print *, "Test Failed. Parsing not match value(0)."
         print *, n1 
         return 
@@ -186,7 +192,7 @@ subroutine binaryToInt64Test(error)
     i = 1
     do while( i <= rCase )
         nString = nStringArray(i)
-        call binaryToInt64(nString, n1, errorLogical)
+        call binaryToInt128(nString, n1, errorLogical)
         if ( errorLogical .eqv. .TRUE. ) then
             print *, "Test Failed. Error reported."
             print *, nStringArray(i), lf, nString, lf, n1
@@ -194,8 +200,8 @@ subroutine binaryToInt64Test(error)
             return 
         end if
         
-        nString = int64ToBinaryAsU(n1)
-        call binaryToInt64(nString, n2, errorLogical)
+        nString = int128ToBinaryAsU(n1)
+        call binaryToInt128(nString, n2, errorLogical)
         if ( errorLogical .eqv. .TRUE. ) then
             print *, "Test Failed. Error reported."
             print *, nStringArray(i), lf, nString, lf, n2
@@ -217,45 +223,48 @@ subroutine binaryToInt64Test(error)
         
     print *, "# TEST 3: Parsing errors."
     ! 1 too many and 1 digit too many
-    call binaryToInt64("10000000000000000000000000000000000000000000000000000000000000000", n1, errorLogical)
+    call binaryToInt128("1000000000000000000000000000000000000" &
+                     // "0000000000000000000000000000000000000" &
+                     // "0000000000000000000000000000000000000" & 
+                     // "000000000000000000", n1, errorLogical)
     if ( errorLogical .neqv. .TRUE. ) then
         print *, "Test 3 fail at 1 too many"
         return
     end if
     !Incorrect digit.
-    call binaryToInt64(char(0), n1, errorLogical)
+    call binaryToInt128(char(0), n1, errorLogical)
     if ( errorLogical .neqv. .TRUE. ) then
         print *, "Test 3 fail at null char"
         return
     end if
-    call binaryToInt64("/", n1, errorLogical)   
+    call binaryToInt128("/", n1, errorLogical)
     if ( errorLogical .neqv. .TRUE. ) then
         print *, "Test 3 fail at /"
         return
     end if
-    call binaryToInt64("2", n1, errorLogical)
+    call binaryToInt128("2", n1, errorLogical)
     if ( errorLogical .neqv. .TRUE. ) then
         print *, "Test 3 fail at 2"
         return
     end if   
     ! Signs where unsigned.
-    call binaryToInt64("-0", n1, errorLogical)
+    call binaryToInt128("-0", n1, errorLogical)
     if ( errorLogical .neqv. .TRUE. ) then
         print *, "Test 3 fail at -0"
         return
     end if
-    call binaryToInt64("+0", n1, errorLogical)
+    call binaryToInt128("+0", n1, errorLogical)
     if ( errorLogical .neqv. .TRUE. ) then
         print *, "Test 3 fail at +0"
         return
     end if
     ! Empty string.
-    call binaryToInt64("      ", n1, errorLogical)
+    call binaryToInt128("      ", n1, errorLogical)
     if ( errorLogical .neqv. .TRUE. ) then
         print *, "Test 3 fail at empty"
         return
     end if
-    call binaryToInt64("", n1, errorLogical)
+    call binaryToInt128("", n1, errorLogical)
     if ( errorLogical .neqv. .TRUE. ) then
         print *, "Test 3 fail at 0 length"
         return
@@ -265,7 +274,7 @@ subroutine binaryToInt64Test(error)
     
     print *, "# Test 4: Positioning test."
     ! Sucess cases
-    call binaryToInt64("months-10110", n1, errorLogical, 8, 13)
+    call binaryToInt128("months-10110", n1, errorLogical, 8, 13)
     if ( errorLogical .neqv. .FALSE. ) then
         print *, "Test 4 failed logical at ", "months-10110", n1
         return        
@@ -275,7 +284,7 @@ subroutine binaryToInt64Test(error)
             return 
         end if
     end if
-    call binaryToInt64("data-range:1111010-ext", n1, errorLogical, 12, 18)
+    call binaryToInt128("data-range:1111010-ext", n1, errorLogical, 12, 18)
     if ( errorLogical .neqv. .FALSE. ) then
         print *, "Test 4 failed logical at ", "data-range:1111010-ext", n1
         return        
@@ -286,17 +295,17 @@ subroutine binaryToInt64Test(error)
         end if
     end if
     ! Fail Cases
-    call binaryToInt64("00000", n1, errorLogical, 2, 1)
+    call binaryToInt128("00000", n1, errorLogical, 2, 1)
     if ( errorLogical .neqv. .TRUE. ) then
         print *, "Test 4 failed at ", "00000"
         return 
     end if
-    call binaryToInt64("0000000", n1, errorLogical, 8, 20)
+    call binaryToInt128("0000000", n1, errorLogical, 8, 20)
     if ( errorLogical .neqv. .TRUE. ) then
         print *, "Test 4 failed at ", "0000000"
         return 
     end if
-    call binaryToInt64("0000000000000000", n2, errorLogical, -15, 0)
+    call binaryToInt128("0000000000000000", n2, errorLogical, -15, 0)
     if ( errorLogical .neqv. .TRUE. ) then
         print *, "Test 4 failed at ", "0000000000000000"
         return 
@@ -309,24 +318,24 @@ subroutine binaryToInt64Test(error)
     print *, lf, lf, lf
 end subroutine
 
-subroutine binaryToInt64TrueErrorTest(error)
-    use fnBinaryUtil64
-    use fnInt64Util
+subroutine binaryToInt128TrueErrorTest(error)
+    use fnBinaryUtil128
+    use fnInt128Util
     implicit none
     character(len=2)   , parameter         ::  lf = char(10) // char(13)
-    character(len=*)   , parameter         ::  testName = "binaryToInt64TrueErrorTest"
-    integer(k_int32)   , parameter         ::  rCase = 10000000, slen = 130
-    integer(k_int32)   , parameter         ::  maxdigit = 1, maxlen = 64
+    character(len=*)   , parameter         ::  testName = "binaryToInt128TrueErrorTest"
+    integer(k_int32)   , parameter         ::  rCase = 10000000, slen = 150
+    integer(k_int32)   , parameter         ::  maxdigit = 1, maxlen = 128
     logical            , intent(out)       ::  error
     character(len=slen)                    ::  nString
-    character(len=64)                      ::  bString
-    character(len=65)                      ::  bString2
+    character(len=128)                     ::  bString
+    character(len=129)                     ::  bString2
     integer(k_int32)                       ::  getRandom32, i, i2, start, &
                                                nlen, llen, errorInt
-    integer(k_int64)                       ::  n1, n2
+    integer(k_int128)                      ::  n1, n2
     character(len=slen), dimension(rCase)  ::  nStringArray
     error = .TRUE.
-    
+
     print *, "##### Start test ", testName, " #####"
     print *, "# Generating random data"
     i = 1 ; llen = 0
@@ -360,7 +369,7 @@ subroutine binaryToInt64TrueErrorTest(error)
     do while( i <= rCase )
         nString = ADJUSTL(nStringArray(i))
         
-        call binaryToInt64TrueError(TRIM(nString), n1, errorInt)
+        call binaryToInt128TrueError(TRIM(nString), n1, errorInt)
         if ( errorInt /= 0 ) then
             print *, "Test Failed. Error reported."
             print *, nStringArray(i)
@@ -368,17 +377,17 @@ subroutine binaryToInt64TrueErrorTest(error)
             return 
         end if
         
-        if ( n1 > -1_k_int64 ) then
-            bString2 = int64ToBinary(n1)
-            if ( bString2(65:65) == charspace ) then
+        if ( n1 > -1_k_int128 ) then
+            bString2 = int128ToBinary(n1)
+            if ( bString2(129:129) == charspace ) then
                 print *, "Something is wrong with the binary function"
                 print *, n1, lf, bString2
                 return 
             end if 
             nString = ADJUSTL(bString2)
         else 
-            bString = int64ToBinaryAsU(n1)
-            if ( bString(64:64) == charspace ) then
+            bString = int128ToBinaryAsU(n1)
+            if ( bString(128:128) == charspace ) then
                 print *, "Something is wrong with the binary function"
                 print *, n1, lf, bString
                 return 
@@ -386,7 +395,7 @@ subroutine binaryToInt64TrueErrorTest(error)
             nString = ADJUSTL(bString)
         end if
         
-        call binaryToInt64TrueError(TRIM(nString), n2, errorInt)
+        call binaryToInt128TrueError(TRIM(nString), n2, errorInt)
         if ( errorInt /= 0 ) then
             print *, "Test Failed. Error reported."
             print *, nStringArray(i)
@@ -403,38 +412,44 @@ subroutine binaryToInt64TrueErrorTest(error)
         
         i = i + 1
     end do 
-    ! 9223372036854775807
-    call binaryToInt64TrueError("111111111111111111111111111111111111111111111111111111111111111", n1, errorInt)
+    ! 170,141,183,460,469,231,731,687,303,715,884,105,727
+    call binaryToInt128TrueError("1111111111111111111111111111111111111" &
+                              // "1111111111111111111111111111111111111" & 
+                              // "1111111111111111111111111111111111111" & 
+                              // "1111111111111111", n1, errorInt)
     if ( errorInt /= 0 ) then
-        print *, "Test Failed. Logical fail value(9223372036854775807)."
+        print *, "Test Failed. Logical fail value(170141183460469231731687303715884105727)."
         print *, n1
         return 
     end if
-    if ( n1 /= 9223372036854775807_k_int64 ) then
+    if ( n1 /= 170141183460469231731687303715884105727_k_int128 ) then
         print *, "Test Failed. Parsing not match value(9223372036854775807)."
         print *, n1 
         return 
     end if
     ! -1
-    call binaryToInt64TrueError("1111111111111111111111111111111111111111111111111111111111111111", n1, errorInt)
+    call binaryToInt128TrueError("1111111111111111111111111111111111111" &
+                              // "1111111111111111111111111111111111111" & 
+                              // "1111111111111111111111111111111111111" & 
+                              // "11111111111111111", n1, errorInt)
     if ( errorInt /= 0 ) then
         print *, "Test Failed. Logical fail value(-1)."
         print *, n1
         return 
     end if
-    if ( n1 /= -1 ) then
+    if ( n1 /= -1_k_int128 ) then
         print *, "Test Failed. Parsing not match value(-1)."
         print *, n1 
         return 
     end if
     ! 0
-    call binaryToInt64TrueError("0", n1, errorInt)
+    call binaryToInt128TrueError("0", n1, errorInt)
     if ( errorInt /= 0 ) then
         print *, "Test Failed. Logical fail value(0)."
         print *, n1
         return 
     end if
-    if ( n1 /= 0 ) then
+    if ( n1 /= 0_k_int128 ) then
         print *, "Test Failed. Parsing not match value(0)."
         print *, n1 
         return 
@@ -446,7 +461,7 @@ subroutine binaryToInt64TrueErrorTest(error)
     i = 1
     do while( i <= rCase )
         nString = nStringArray(i)
-        call binaryToInt64TrueError(nString, n1, errorInt)
+        call binaryToInt128TrueError(nString, n1, errorInt)
         if ( errorInt /= 0 ) then
             print *, "Test Failed. Error reported."
             print *, nString, lf, n1 , lf, n2
@@ -454,8 +469,8 @@ subroutine binaryToInt64TrueErrorTest(error)
             return 
         end if
 
-        nString = int64ToBinaryAsU(n1)
-        call binaryToInt64TrueError(nString, n2, errorInt)
+        nString = int128ToBinaryAsU(n1)
+        call binaryToInt128TrueError(nString, n2, errorInt)
         if ( n1 /= n2 ) then
             print *, "Test Failed. Parsing not match."
             print *, nString, lf, n1 , lf, n2
@@ -470,50 +485,65 @@ subroutine binaryToInt64TrueErrorTest(error)
 
     print *, "# TEST 3: Parsing errors, test error return value."
     ! 1 too many and 1 digit too many
-    call binaryToInt64TrueError("10000000000000000000000000000000000000000000000000000000000000000", n1, errorInt)
+    call binaryToInt128TrueError("1000000000000000000000000000000000000" &
+                              // "0000000000000000000000000000000000000" &
+                              // "0000000000000000000000000000000000000" & 
+                              // "000000000000000000", n1, errorInt)
     if ( errorInt /= 3 ) then
         print *, "Test 3 fail at ", "10000000000000000000000000000000000000000000000000000000000000000"
         return
     end if
     !Incorrect digit
-    call binaryToInt64TrueError(char(0), n1, errorInt)
+    call binaryToInt128TrueError(char(0), n1, errorInt)
     if ( errorInt /= 2 ) then
         print *, "Test 3 fail at null char"
         return
     end if
-    call binaryToInt64TrueError("/", n1, errorInt)
+    call binaryToInt128TrueError("/", n1, errorInt)
     if ( errorInt /= 2 ) then
         print *, "Test 3 fail at /"
         return
     end if
-    call binaryToInt64TrueError("100000000000000000000000000000000000000000000000000000000000000002", n1, errorInt)
+    call binaryToInt128TrueError("1000000000000000000000000000000000000" &
+                              // "0000000000000000000000000000000000000" &
+                              // "0000000000000000000000000000000000000" & 
+                              // "0000000000000000002", n1, errorInt)
     if ( errorInt /= 2 ) then
-        print *, "Test 3 fail at 100000000000000000000000000000000000000000000000000000000000000002:"
+        print *, "Test 3 fail at ", "1000000000000000000000000000000000000" &
+                                 // "0000000000000000000000000000000000000" &
+                                 // "0000000000000000000000000000000000000" & 
+                                 // "0000000000000000002"
         return
     end if
-    call binaryToInt64TrueError("1000000000000000000000000000000000000000000000000000000000000000000:", n1, errorInt)
+    call binaryToInt128TrueError("1000000000000000000000000000000000000" &
+                              // "0000000000000000000000000000000000000" &
+                              // "0000000000000000000000000000000000000" & 
+                              // "00000000000000000000:", n1, errorInt)
     if ( errorInt /= 2 ) then
-        print *, "Test 3 fail at 1000000000000000000000000000000000000000000000000000000000000000000:"
+        print *, "Test 3 fail at ", "1000000000000000000000000000000000000" &
+                                 // "0000000000000000000000000000000000000" &
+                                 // "0000000000000000000000000000000000000" & 
+                                 // "00000000000000000000:"
         return
     end if
     ! Signs where unsigned
-    call binaryToInt64TrueError("-0", n1, errorInt)
+    call binaryToInt128TrueError("-0", n1, errorInt)
     if ( errorInt /= 2 ) then
         print *, "Test 3 fail at -0"
         return
     end if
-    call binaryToInt64TrueError("+0", n1, errorInt)
+    call binaryToInt128TrueError("+0", n1, errorInt)
     if ( errorInt /= 2 ) then
         print *, "Test 3 fail at +0"
         return
     end if
     ! Empty string.
-    call binaryToInt64TrueError("      ", n1, errorInt)
+    call binaryToInt128TrueError("      ", n1, errorInt)
     if ( errorInt /= 1 ) then
         print *, "Test 3 fail at empty"
         return
     end if
-    call binaryToInt64TrueError("", n1, errorInt)
+    call binaryToInt128TrueError("", n1, errorInt)
     if ( errorInt /= 1 ) then
         print *, "Test 3 fail at 0 length"
         return
@@ -523,7 +553,7 @@ subroutine binaryToInt64TrueErrorTest(error)
 
     print *, "# Test 4: Positioning test."
     ! Sucess cases
-    call binaryToInt64TrueError("months-10110", n1, errorInt, 8, 13)
+    call binaryToInt128TrueError("months-10110", n1, errorInt, 8, 13)
     if ( errorInt /= 0 ) then
         print *, "Test 4 failed logical at ", "months-10110", n2
         return        
@@ -533,7 +563,7 @@ subroutine binaryToInt64TrueErrorTest(error)
             return 
         end if
     end if
-    call binaryToInt64TrueError("data-range:1111010-ext", n1, errorInt, 12, 18)
+    call binaryToInt128TrueError("data-range:1111010-ext", n1, errorInt, 12, 18)
     if ( errorInt /= 0 ) then
         print *, "Test 4 failed logical at ", "data-range:1111010-ext", n1
         return        
@@ -544,17 +574,17 @@ subroutine binaryToInt64TrueErrorTest(error)
         end if
     end if
     ! Fail Cases
-    call binaryToInt64TrueError("00000000", n1, errorInt, 2, 1)
+    call binaryToInt128TrueError("00000000", n1, errorInt, 2, 1)
     if ( errorInt /= 5 ) then
         print *, "Test 4 failed at ", "00000000"
         return 
     end if
-    call binaryToInt64TrueError("0000", n1, errorInt, 8, 20)
+    call binaryToInt128TrueError("0000", n1, errorInt, 8, 20) 
     if ( errorInt /= 5 ) then
         print *, "Test 4 failed at ", "0000"
         return 
-    end if
-    call binaryToInt64TrueError("12345678", n2, errorInt, -15, 0)
+    end if 
+    call binaryToInt128TrueError("12345678", n2, errorInt, -15, 0)
     if ( errorInt /= 5 ) then
         print *, "Test 4 failed at ", "000000000000000000"
         return 
@@ -567,17 +597,17 @@ subroutine binaryToInt64TrueErrorTest(error)
     print *, lf, lf, lf
 end subroutine
 
-subroutine binaryCompareAsInt64Test(error)
-    use fnBinaryUtil64
+subroutine binaryCompareAsInt128Test(error)
+    use fnBinaryUtil128
     implicit none
-    character(len=2) , parameter      ::  lf = char(10) // char(13)
-    character(len=*) , parameter      ::  testName = "binaryCompareAsInt64Test"
-    logical          , intent(out)    ::  error
-    logical                           ::  errorLogical
-    integer(k_int32) , dimension(15)  ::  rExp
-    character(len=70), dimension(15)  ::  lvalue
-    character(len=70), dimension(15)  ::  rvalue
-    integer(k_int32)                  ::  n1, i
+    logical           , intent(out)    ::  error
+    character(len=2)  , parameter      ::  lf = char(10) // char(13)
+    character(len=*)  , parameter      ::  testName = "binaryCompareAsInt128Test"
+    integer(k_int32)  , dimension(15)  ::  rExp
+    character(len=150), dimension(15)  ::  lvalue
+    character(len=150), dimension(15)  ::  rvalue
+    logical                            ::  errorLogical
+    integer(k_int32)                   ::  n1, i
     error = .TRUE.
 
     ! Prep Cases
@@ -599,11 +629,15 @@ subroutine binaryCompareAsInt64Test(error)
     rExp(4)   = 1
 
     ! Note that binary are being parsed as they are bit representation
-    ! to the signed int type. Thus,                        1000000000000000000000000000000000000000000000000000000000000001
-    ! is actually -9223372036854775807 and is smaller than  111111111111111111111111111111111111111111111111111111111111111
-    ! (1 digit less) and is 9223372036854775807
-    lvalue(5) = " 111111111111111111111111111111111111111111111111111111111111111"
-    rvalue(5) = "1000000000000000000000000000000000000000000000000000000000000001"
+    ! to the signed int type. Thus,
+    ! 10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001
+    ! is actually -170,141,183,460,469,231,731,687,303,715,884,105,727 and is smaller than
+    !  1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111
+    ! (1 digit less) and is 170,141,183,460,469,231,731,687,303,715,884,105,728
+    lvalue(5) = " 111111111111111111111111111111111111111111111111111111" &
+             // "1111111111111111111111111111111111111111111111111111111111111111111111111"
+    rvalue(5) = "1000000000000000000000000000000000000000000000000000000" &
+             // "0000000000000000000000000000000000000000000000000000000000000000000000001"
     rExp(5)   = 1
 
     ! 0
@@ -654,7 +688,7 @@ subroutine binaryCompareAsInt64Test(error)
     print *, "# TEST 1: Right format comparision."
     i = 1
     do while ( i <= 15 )
-        call binaryCompareAsInt64(lvalue(i), rvalue(i), n1, errorLogical)
+        call binaryCompareAsInt128(lvalue(i), rvalue(i), n1, errorLogical)
         if ( errorLogical .neqv. .FALSE. ) then
             print *, "---Test 2 fail logical at case '", i ,"'. Got error."
             return 
@@ -670,36 +704,48 @@ subroutine binaryCompareAsInt64Test(error)
 
     print *, "# TEST 2: Errors(Errors suppose to be true)."
     ! Empty string
-    call binaryCompareAsInt64("10", "", n1, errorLogical)
+    call binaryCompareAsInt128("10", "", n1, errorLogical)
     if ( errorLogical .neqv. .TRUE. ) then
         print *, "Test 2 fail at ", "10 to empty"
         return 
     end if
-    call binaryCompareAsInt64("  ", "10", n1, errorLogical)
+    call binaryCompareAsInt128("  ", "10", n1, errorLogical)
     if ( errorLogical .neqv. .TRUE. ) then
         print *, "Test 2 fail at ", "empty to 10"
         return 
     end if
     ! Incorrect format
-    call binaryCompareAsInt64("112", "110", n1, errorLogical)
+    call binaryCompareAsInt128("112", "110", n1, errorLogical)
     if ( errorLogical .neqv. .TRUE. ) then
         print *, "Test 2 fail at ", "112", "110"
         return 
     end if
-    call binaryCompareAsInt64("110", "11`", n1, errorLogical)
+    call binaryCompareAsInt128("110", "11`", n1, errorLogical)
     if ( errorLogical .neqv. .TRUE. ) then
         print *, "Test 2 fail at ", "110", "11`"
         return 
     end if
     ! Beyond capacity
-    call binaryCompareAsInt64("11111", "10000000000000000000000000000000000000000000000000000000000000000", n1, errorLogical)
+    call binaryCompareAsInt128("11111", "1000000000000000000000000000000" &
+                                    // "00000000000000000000000000000000" & 
+                                    // "00000000000000000000000000000000" &
+                                    // "0000000000000000000000000000000000", n1, errorLogical)
     if ( errorLogical .neqv. .TRUE. ) then
-        print *, "Test 2 fail at", "11111", "10000000000000000000000000000000000000000000000000000000000000000"
+        print *, "Test 2 fail at", "11111", "1000000000000000000000000000000" &
+                                         // "00000000000000000000000000000000" & 
+                                         // "00000000000000000000000000000000" &
+                                         // "0000000000000000000000000000000000"
         return 
     end if
-    call binaryCompareAsInt64("10000000000000000000000000000000000000000000000000000000000000000", "11111", n1, errorLogical)
+    call binaryCompareAsInt128("1000000000000000000000000000000000000000" &
+                            // "0000000000000000000000000000000000000000" & 
+                            // "0000000000000000000000000000000000000000" &
+                            // "000000000", "11111", n1, errorLogical)
     if ( errorLogical .neqv. .TRUE. ) then
-        print *, "Test 2 fail at", "10000000000000000000000000000000000000000000000000000000000000000", "11111"
+        print *, "Test 2 fail at ", "1000000000000000000000000000000000000000" &
+                                 // "0000000000000000000000000000000000000000" & 
+                                 // "0000000000000000000000000000000000000000" &
+                                 // "000000000", "11111"
         return 
     end if
     print *, "# Test 2: Passed."
@@ -710,16 +756,16 @@ subroutine binaryCompareAsInt64Test(error)
     print *, lf, lf
 end subroutine
 
-subroutine binaryInt64OrSmallerTest(error)
-    use fnBinaryUtil64
+subroutine binaryInt128OrSmallerTest(error)
+    use fnBinaryUtil128
     implicit none
-    character(len=2) , parameter      ::  lf = char(10) // char(13)
-    character(len=*) , parameter      ::  testName = "binaryInt64OrSmallerTest"
-    logical          , intent(out)    ::  error
-    integer(k_int32) , dimension(23)  ::  rExp
-    character(len=70), dimension(23)  ::  lvalue
-    character(len=70), dimension(23)  ::  rvalue
-    integer(k_int32)                  ::  i
+    character(len=2)  , parameter      ::  lf = char(10) // char(13)
+    character(len=*)  , parameter      ::  testName = "binaryInt128OrSmallerTest"
+    logical           , intent(out)    ::  error
+    integer(k_int32)  , dimension(23)  ::  rExp
+    character(len=150), dimension(23)  ::  lvalue
+    character(len=150), dimension(23)  ::  rvalue
+    integer(k_int32)                   ::  i
     error = .TRUE.
     
     ! Invalid to
@@ -728,7 +774,8 @@ subroutine binaryInt64OrSmallerTest(error)
     rExp(1)   = 0
 
     lvalue(2) = "111:"
-    rvalue(2) = "10000000000000000000000000000000000000000000000000000000000000000"
+    rvalue(2) = "1000000000000000000000000000000000000000000000000000000000000000" &
+             // "00000000000000000000000000000000000000000000000000000000000000000" 
     rExp(2)   = -1
 
     lvalue(3) = "01/"
@@ -744,23 +791,29 @@ subroutine binaryInt64OrSmallerTest(error)
     rExp(5)   = -1
 
     ! Beyond capacity to
-    lvalue(6) = "10000000000000000000000000000000000000000000000000000000000000000"
+    lvalue(6) = "1000000000000000000000000000000000000000000000000000000000000000" &
+             // "00000000000000000000000000000000000000000000000000000000000000000" 
     rvalue(6) = "/1"
     rExp(6)   = 1
 
-    lvalue(7) = "10000000000000000000000000000000000000000000000000000000000000000"
-    rvalue(7) = "10000000000000000000000000000000000000000000000000000000000000000000"
+    lvalue(7) = "1000000000000000000000000000000000000000000000000000000000000000" &
+             // "00000000000000000000000000000000000000000000000000000000000000000" 
+    rvalue(7) = "1000000000000000000000000000000000000000000000000000000000000000" &
+             // "000000000000000000000000000000000000000000000000000000000000000000000" 
     rExp(7)   = 0
 
-    lvalue(8) = "10000000000000000000000000000000000000000000000000000000000000000"
+    lvalue(8) = "1000000000000000000000000000000000000000000000000000000000000000" &
+             // "00000000000000000000000000000000000000000000000000000000000000000" 
     rvalue(8) = "      "
     rExp(8)   = -1
 
-    lvalue(9) = "10000000000000000000000000000000000000000000000000000000000000000"
+    lvalue(9) = "1000000000000000000000000000000000000000000000000000000000000000" &
+             // "00000000000000000000000000000000000000000000000000000000000000000" 
     rvalue(9) = ""
     rExp(9)   = -1
 
-    lvalue(10) = "10000000000000000000000000000000000000000000000000000000000000000"
+    lvalue(10) = "1000000000000000000000000000000000000000000000000000000000000000" &
+             // "00000000000000000000000000000000000000000000000000000000000000000" 
     rvalue(10) = "110011"
     rExp(10)   = -1
 
@@ -774,7 +827,8 @@ subroutine binaryInt64OrSmallerTest(error)
     rExp(12)   = 1
 
     lvalue(13) = "           "
-    rvalue(13) = "10000000000000000000000000000000000000000000000000000000000000000"
+    rvalue(13) = "1000000000000000000000000000000000000000000000000000000000000000" &
+              // "00000000000000000000000000000000000000000000000000000000000000000" 
     rExp(13)   = 1
 
     lvalue(14) = "      "
@@ -790,7 +844,8 @@ subroutine binaryInt64OrSmallerTest(error)
     rExp(16)   = 1
 
     lvalue(17) = "010"
-    rvalue(17) = "10000000000000000000000000000000000000000000000000000000000000000"
+    rvalue(17) = "1000000000000000000000000000000000000000000000000000000000000000" &
+              // "00000000000000000000000000000000000000000000000000000000000000000" 
     rExp(17)   = 1
     
     lvalue(18) = "010"
@@ -823,9 +878,9 @@ subroutine binaryInt64OrSmallerTest(error)
     print *, "# TEST 1: Case to case."
     i = 1
     do while ( i <= 23 )
-        if ( binaryInt64OrSmaller(lvalue(i), rvalue(i)) /= rExp(i) ) then
+        if ( binaryInt128OrSmaller(lvalue(i), rvalue(i)) /= rExp(i) ) then
             print *, "---Test 2 fail result at case '", i ,"'. Got unexpected value '" &
-                   , binaryInt64OrSmaller(lvalue(i), rvalue(i)), "'"
+                   , binaryInt128OrSmaller(lvalue(i), rvalue(i)), "'"
             return
         end if
         i = i + 1
@@ -840,14 +895,15 @@ subroutine binaryInt64OrSmallerTest(error)
 end subroutine
 
 pure subroutine fnBinaryUtil64TestPure()
-    use fnBinaryUtil64
+    use fnBinaryUtil128
     implicit none
-    logical           ::  el
-    integer(k_int64)  ::  r64
-    integer(k_int32)  ::  ei, r
+    logical            ::  el
+    integer(k_int128)  ::  r128
+    integer(k_int32)   ::  ei, r
 
-    call binaryToInt64("0", r64, el)
-    call binaryToInt64TrueError("0",  r64, ei)
-    call binaryCompareAsInt64("0", "0", r, el)
-    r = binaryInt64OrSmaller("1","1")
+    call binaryToInt128("0", r128, el)
+    call binaryToInt128TrueError("0",  r128, ei)
+    call binaryCompareAsInt128("0", "0", r, el)
+    r = binaryInt128OrSmaller("1","1")
 end subroutine
+
