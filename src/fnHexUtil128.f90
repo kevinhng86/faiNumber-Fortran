@@ -282,7 +282,7 @@ contains
         call hexToInt128(firstString, n1, e1)
         call hexToInt128(secondString, n2, e2)
 
-        if ( e1 .eqv. .TRUE. .OR. e2 .eqv. .TRUE. ) then
+        if ( (e1 .eqv. .TRUE.) .OR. (e2 .eqv. .TRUE.) ) then
             error = .TRUE.
             return
         end if
