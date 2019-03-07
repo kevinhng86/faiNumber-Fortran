@@ -722,7 +722,7 @@ subroutine isBaseTest(error)
     end if
     ! Base 10
     ignore = isBase("/", 10, results)
-    if ( isBase("/", 10, results) .neqv. .FALSE. ) then
+    if ( results .neqv. .FALSE. ) then
         print *, "Test 2 fail at ", "2"
         return
     end if
@@ -912,7 +912,7 @@ subroutine isUnsignedBaseTest(error)
     end if
     ! Base 10
     ignore = isUnsignedBase("/", 10, results)
-    if ( isUnsignedBase("/", 10, results) .neqv. .FALSE. ) then
+    if ( results .neqv. .FALSE. ) then
         print *, "Test 2 fail at ", "2"
         return
     end if
