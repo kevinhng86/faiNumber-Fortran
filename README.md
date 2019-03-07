@@ -1,6 +1,6 @@
-## IMPORTANT, Module names may change before the release of the official
-## binary of the first version. This to allow flexibility of when
-## to use or not to use a pure procedure.
+#### IMPORTANT, Module names may change before the release of the official
+#### binary of the first version. This is to allow the flexibility of when
+#### to use or not to use a pure procedure.
 
 # faiNumber-Fortran
 
