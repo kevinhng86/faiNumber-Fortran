@@ -1,3 +1,7 @@
+## IMPORTANT, Module names may change before the release of the official
+## binary of the first version. This to allow flexibility of when
+## to use or not to use a pure procedure.
+
 # faiNumber-Fortran
 
 faiNumber-Fortran is a fast, flexible, and secured numerical library for
