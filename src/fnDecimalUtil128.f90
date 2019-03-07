@@ -64,11 +64,11 @@ contains
     !        startpos & endpos explanation</a>.
     logical function decToInt128(input, output, startpos, endpos) result(error)
         implicit none 
-        character(len=*) , intent(in)   ::  input                       !! A string to be parsed as a signed decimal integer string to an int128 value.
-        integer(k_int128), intent(out)  ::  output                      !! An int128 value of the <code>input</code> string if no error has occurred during parsing.
-        integer(k_int32) , optional     ::  startpos                    !! An int32 value of the position(inclusive) of where to start parsing. This is an intent in variable, but is being declared like this due to performance reasons.
-        integer(k_int32) , optional     ::  endpos                      !! An int32 value of the position(inclusive) of where to end parsing. This is an intent in variable, but is being declared like this due to performance reasons.
-        integer(k_int32)                ::  c, length, start, runlen, ch1
+        character(len=*) , intent(in)            ::  input              !! A string to be parsed as a signed decimal integer string to an int128 value.
+        integer(k_int128), intent(out)           ::  output             !! An int128 value of the <code>input</code> string if no error has occurred during parsing.
+        integer(k_int32) , intent(in), optional  ::  startpos           !! An int32 value of the position(inclusive) of where to start parsing.
+        integer(k_int32) , intent(in), optional  ::  endpos             !! An int32 value of the position(inclusive) of where to end parsing.
+        integer(k_int32)                         ::  c, length, start, runlen, ch1
         output = 0_k_int128 ; error = .TRUE.
         
         length = len(input) ; start = 1
@@ -181,11 +181,11 @@ contains
     !  @note  This function may take longer on unsuccessful parse cases.    
     integer(k_int32) function decToInt128TrueError(input, output, startpos, endpos) result(error)
         implicit none 
-        character(len=*) , intent(in)   ::  input                       !! A string to be parsed as a signed decimal integer string to an int128 value.
-        integer(k_int128), intent(out)  ::  output                      !! An int128 value of the <code>input</code> string if no error has occurred during parsing.
-        integer(k_int32) , optional     ::  startpos                    !! An int32 value of the position(inclusive) of where to start parsing. This is an intent in variable, but is being declared like this due to performance reasons.
-        integer(k_int32) , optional     ::  endpos                      !! An int32 value of the position(inclusive) of where to end parsing. This is an intent in variable, but is being declared like this due to performance reasons.
-        integer(k_int32)                ::  c, length, start, runlen, ch1
+        character(len=*) , intent(in)            ::  input              !! A string to be parsed as a signed decimal integer string to an int128 value.
+        integer(k_int128), intent(out)           ::  output             !! An int128 value of the <code>input</code> string if no error has occurred during parsing.
+        integer(k_int32) , intent(in), optional  ::  startpos           !! An int32 value of the position(inclusive) of where to start parsing.
+        integer(k_int32) , intent(in), optional  ::  endpos             !! An int32 value of the position(inclusive) of where to end parsing.
+        integer(k_int32)                         ::  c, length, start, runlen, ch1
         output = 0_k_int128 ; error = 0
         
         length = len(input) ; start = 1

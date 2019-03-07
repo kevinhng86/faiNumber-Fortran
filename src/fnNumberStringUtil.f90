@@ -55,6 +55,7 @@ contains
     !  <p>A logical value of `.FALSE.` will be returned where the `input`
     !  string is empty(only spaces), 0 length, or is not a valid
     !  signed decimal integer string.
+    !  </p>
     logical function isInteger(input)
         implicit none
         character(len=*), intent(in)  ::  input                         !! A string.
@@ -101,6 +102,7 @@ contains
     !  <p>A logical value of `.FALSE.` will be returned where the `input`
     !  string is empty(only spaces), 0 length, or is not a valid
     !  unsigned decimal integer string.
+    !  </p>
     logical function isUnsignedInteger(input)
         implicit none
         character(len=*), intent(in)  ::  input                         !! A string.
@@ -142,7 +144,8 @@ contains
     !
     !  <p>A logical value of `.FALSE.` will be returned where the `input`
     !  string is empty(only spaces), 0 length, or is not a valid
-    !  signed binary integer string.    
+    !  signed binary integer string.
+    !  </p>  
     logical function isBinary(input)
         implicit none
         character(len=*), intent(in)  ::  input                         !! A string.
@@ -187,7 +190,8 @@ contains
     !
     !  <p>A logical value of `.FALSE.` will be returned where the `input`
     !  string is empty(only spaces), 0 length, or is not a valid
-    !  unsigned binary integer string.    
+    !  unsigned binary integer string.
+    !  </p>
     logical function isUnsignedBinary(input)
         implicit none
         character(len=*), intent(in)  ::  input                         !! A string.
@@ -228,6 +232,7 @@ contains
     !  <p>A logical value of `.FALSE.` will be returned where the `input`
     !  string is empty(only spaces), 0 length, or is not a valid
     !  signed octal integer string.
+    !  </p>
     logical function isOctal(input)
         implicit none
         character(len=*), intent(in)  ::  input                         !! A string.
@@ -273,6 +278,7 @@ contains
     !  <p>A logical value of `.FALSE.` will be returned where the `input`
     !  string is empty(only spaces), 0 length, or is not a valid
     !  unsigned octal integer string.
+    !  </p>
     logical function isUnsignedOctal(input)
         implicit none
         character(len=*), intent(in)  ::  input                         !! A string.
@@ -313,6 +319,7 @@ contains
     !  <p>A logical value of `.FALSE.` will be returned where the `input`
     !  string is empty(only spaces), 0 length, or is not a valid
     !  signed hexadecimal integer string.
+    !  </p>
     logical function isHex(input)
         implicit none
         character(len=*), intent(in)  ::  input                         !! A string.
@@ -366,6 +373,7 @@ contains
     !  <p>A logical value of `.FALSE.` will be returned where the `input`
     !  string is empty(only spaces), 0 length, or is not a valid
     !  unsigned hexadecimal integer string.
+    !  </p>
     logical function isUnsignedHex(input)
         implicit none
         character(len=*), intent(in)  ::  input                         !! A string.
@@ -409,15 +417,14 @@ contains
     !
     !  <p>This function ignores leading and trailing whitespaces.
     !  
-    !  <p>This function support numbering system with radix from 2 to
-    !     36.
+    !  <p>This function support numbering system with radix from 2 to 36.
     ! 
     !  <p>This function returns a logical value of `.TRUE.` on error. 
-    !     Otherwise, a logical value of `.FALSE.` is returned.
+    !  Otherwise, a logical value of `.FALSE.` is returned.
     !
     !  <p>This function considers an error to has occurred when the 
-    !     value of the argument `base` is smaller than 2 or larger than
-    !     36.
+    !  value of the argument `base` is smaller than 2 or larger than 36.
+    !  </p>
     logical function isBase(input, base, output) result(error)
         implicit none
         character(len=*), intent(in)   ::  input                        !! A string.
@@ -477,15 +484,14 @@ contains
     !
     !  <p>This function ignores leading and trailing whitespaces.
     !  
-    !  <p>This function support numbering system with radix from 2 to
-    !     36.
+    !  <p>This function support numbering system with radix from 2 to 36.
     ! 
     !  <p>This function returns a logical value of `.TRUE.` on error. 
-    !     Otherwise, a logical value of `.FALSE.` is returned.
+    !  Otherwise, a logical value of `.FALSE.` is returned.
     !
     !  <p>This function considers an error to has occurred when the 
-    !     value of the argument `base` is smaller than 2 or larger than
-    !     36.
+    !  value of the argument `base` is smaller than 2 or larger than 36.
+    !  </p>
     logical function isUnsignedBase(input, base, output) result(error)
         implicit none
         character(len=*), intent(in)   ::  input                        !! A string.
@@ -1010,7 +1016,8 @@ contains
     !  1 - empty string `firstString`(spaces only or 0 length)<br />
     !  2 - empty string `secondString`(spaces only or 0 length)<br />
     !  3 - bad format `firstString`<br />
-    !  4 - bad format `secondString`<br />
+    !  4 - bad format `secondString`
+    !  </p>
     integer(k_int32) function fnStringCompare(firstString, secondString, output) result(error)
         implicit none
         character(len=*), intent(in)   ::  firstString                  !! A string to be compared to the string `secondString`.
