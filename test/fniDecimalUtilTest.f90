@@ -172,6 +172,116 @@ subroutine decToInt32Test(error)
     print *, "# Test 2: Passed."
     print *, lf, lf, lf
 
+    print *, "# TEST 3: Parsing errors, test error return value."
+    ! Underflow
+    if ( decToInt32("-2147483649", n1) .neqv. .TRUE. ) then
+        print *, "Test 3 fail at -2147483649"
+        return
+    end if
+    if ( decToInt32("-21474836480", n1) .neqv. .TRUE. ) then
+        print *, "Test 3 fail at -21474836480"
+        return
+    end if
+    ! Overflow
+    if ( decToInt32("2147483648", n1) .neqv. .TRUE. ) then
+        print *, "Test 3 fail at 2147483648"
+        return
+    end if
+    if ( decToInt32("21474836470", n1) .neqv. .TRUE. ) then
+        print *, "Test 3 fail at 21474836470"
+        return
+    end if
+    !Incorrect digit.
+    if ( decToInt32(char(0), n1) .neqv. .TRUE. ) then
+        print *, "Test 3 fail at null char"
+        return
+    end if   
+    if ( decToInt32("/", n1) .neqv. .TRUE. ) then
+        print *, "Test 3 fail at /"
+        return
+    end if   
+    if ( decToInt32("21474878364812345678912345:", n1) .neqv. .TRUE. ) then
+        print *, "Test 3 fail at 21474878364812345678912345:"
+        return
+    end if   
+    if ( decToInt32("-214748783648123456789123451a", n1) .neqv. .TRUE. ) then
+        print *, "Test 3 fail at -214748783648123456789123451a"
+        return
+    end if   
+    if ( decToInt32("214748364a", n1) .neqv. .TRUE. ) then
+        print *, "Test 3 fail at 214748364a"
+        return
+    end if   
+    if ( decToInt32("214748363a", n1) .neqv. .TRUE. ) then
+        print *, "Test 3 fail at 214748363a"
+        return
+    end if   
+    if ( decToInt32("214748365a", n1) .neqv. .TRUE. ) then
+        print *, "Test 3 fail at 214748365a"
+        return
+    end if   
+    if ( decToInt32("214748365a", n1) .neqv. .TRUE. ) then
+        print *, "Test 3 fail at 214748365a"
+        return
+    end if      
+    ! Signs.
+    if ( decToInt32("-", n1) .neqv. .TRUE. ) then
+        print *, "Test 3 fail at -"
+        return
+    end if
+    if ( decToInt32("+", n1) .neqv. .TRUE. ) then
+        print *, "Test 3 fail at +"
+        return
+    end if
+    ! Empty string.
+    if ( decToInt32("      ", n1) .neqv. .TRUE. ) then
+        print *, "Test 3 fail at empty"
+        return
+    end if
+    if ( decToInt32("", n1) .neqv. .TRUE. ) then
+        print *, "Test 3 fail at empty"
+        return
+    end if
+
+    print *, "# TEST 3 Passed."
+    print *, lf, lf, lf
+
+    print *, "# Test 4: Positioning test."
+    ! Sucess cases
+    if ( decToInt32("months-21478", n1, 8, 13) .neqv. .FALSE. ) then
+        print *, "Test 4 failed logical at ", "months-21478", n2
+        return        
+    else 
+        if ( n1 /= 21478 ) then 
+            print *, "Test 4 failed parse at ", "months-21478", n1
+            return 
+        end if
+    end if
+    if ( decToInt32("data-range:-214789-ext", n1, 12, 18) .neqv. .FALSE. ) then
+        print *, "Test 4 failed logical at ", "data-range:-214789-ext", n1
+        return        
+    else 
+        if ( n1 /= -214789 ) then 
+            print *, "Test 4 failed parse at ", "data-range:-214789-ext", n1
+            return 
+        end if
+    end if
+    ! Fail Cases
+    if ( decToInt32("21478", n1, 2, 1) .neqv. .TRUE. ) then
+        print *, "Test 4 failed at ", "21478"
+        return 
+    end if 
+    if ( decToInt32("1234567", n1, 8, 20) .neqv. .TRUE. ) then
+        print *, "Test 4 failed at ", "1234567"
+        return 
+    end if 
+    if ( decToInt32("12345678", n2, -15, 0) .neqv. .TRUE. ) then
+        print *, "Test 4 failed at ", "12345678"
+        return 
+    end if 
+    print *, "# Test 4: Passed."
+    print *, lf, lf, lf
+
     error = .FALSE.
     print *, "##### Test ", testName, " Passed. #####"
     print *, lf, lf, lf
@@ -412,7 +522,6 @@ subroutine decToInt32TrueErrorTest(error)
     print *, "# Test 4: Passed."
     print *, lf, lf, lf
      
-
     error = .FALSE.
     print *, "##### Test ", testName, " Passed. #####"
     print *, lf, lf, lf
