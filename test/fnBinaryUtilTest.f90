@@ -839,7 +839,7 @@ subroutine binaryInt32OrSmallerTest(error)
     error = .FALSE.
 end subroutine
 
-pure subroutine fnBinaryUtil64TestPure()
+pure subroutine fnBinaryUtilTestPure()
     use fnBinaryUtil
     implicit none
     logical           ::  el

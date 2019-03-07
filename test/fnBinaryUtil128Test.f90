@@ -894,7 +894,7 @@ subroutine binaryInt128OrSmallerTest(error)
     error = .FALSE.
 end subroutine
 
-pure subroutine fnBinaryUtil64TestPure()
+pure subroutine fnBinaryUtil128TestPure()
     use fnBinaryUtil128
     implicit none
     logical            ::  el
@@ -906,4 +906,3 @@ pure subroutine fnBinaryUtil64TestPure()
     call binaryCompareAsInt128("0", "0", r, el)
     r = binaryInt128OrSmaller("1","1")
 end subroutine
-
