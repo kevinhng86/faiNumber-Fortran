@@ -297,6 +297,7 @@ contains
     !
     !  <p>Compare two strings as signed decimal integer strings by 
     !  parsing them to int128 values first.
+    !  </p>
     !
     !  @see  [[decToInt128]]
     pure subroutine decCompareAsInt128(firstString, secondString, output, error) 

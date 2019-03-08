@@ -225,6 +225,7 @@ contains
     !
     !  <p>Compare two strings as octal strings by parsing them to int32
     !  values first.
+    !  </p>
     !
     !  @note  Octal strings are being parsed as bits represented by
     !         octal digits to a signed type.

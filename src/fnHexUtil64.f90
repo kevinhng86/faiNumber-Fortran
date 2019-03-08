@@ -264,6 +264,7 @@ contains
     !
     !  <p>Compare two strings as hexadecimal strings by parsing them to
     !  int64 values first.
+    !  </p>
     !
     !  @note  Hexadecimal strings are being parsed as bits represented
     !         by hexadecimal digits to a signed type.

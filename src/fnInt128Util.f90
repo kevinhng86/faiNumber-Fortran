@@ -134,6 +134,7 @@ contains
     !  Values within the return string will always be right justified. 
     !  Whitespaces will fill the left side of the return string if there
     !  is not enough values to fill the string.
+    !  </p>
     pure character(len=129) function int128ToBinary(input) result(strOut)
         implicit none        
         integer(k_int128), intent(in)  ::  input                        !! An int128 value.
@@ -288,6 +289,7 @@ contains
     !  Values within the return string will always be right justified. 
     !  Whitespaces will fill the left side of the return string if there
     !  is not enough values to fill the string.
+    !  </p>
     pure character(len=44) function int128ToOctal(input) result(strOut)
         implicit none
         integer(k_int128), intent(in)  ::  input                        !! An int128 value.
@@ -428,6 +430,7 @@ contains
     !  Values within the return string will always be right justified. 
     !  Whitespaces will fill the left side of the return string if there
     !  is not enough values to fill the string.
+    !  </p>
     pure character(len=33) function int128ToHex(input) result(strOut)
         implicit none
         integer(k_int128), intent(in)  ::  input                        !! An int128 value.

@@ -228,6 +228,7 @@ contains
     !
     !  <p>Compare two strings as binary string by parsing them to int128
     !  values first.
+    !  </p>
     !
     !  @note  Binary strings are being parsed as bits represented by binary
     !         digits to a signed type.

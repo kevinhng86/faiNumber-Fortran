@@ -56,6 +56,7 @@ contains
     !  <p>A logical value of `.FALSE.` will be returned where the `input`
     !  string is empty(only spaces), 0 length, or is not a valid
     !  signed decimal integer string.
+    !  </p>
     pure logical function isInteger(input) result(lOut)
         implicit none
         character(len=*), intent(in)  ::  input                         !! A string.
@@ -143,7 +144,8 @@ contains
     !
     !  <p>A logical value of `.FALSE.` will be returned where the `input`
     !  string is empty(only spaces), 0 length, or is not a valid
-    !  signed binary integer string.    
+    !  signed binary integer string.
+    !  </p>    
     pure logical function isBinary(input) result(lOut)
         implicit none
         character(len=*), intent(in)  ::  input                         !! A string.
@@ -188,7 +190,8 @@ contains
     !
     !  <p>A logical value of `.FALSE.` will be returned where the `input`
     !  string is empty(only spaces), 0 length, or is not a valid
-    !  unsigned binary integer string.    
+    !  unsigned binary integer string.
+    !  </p>
     pure logical function isUnsignedBinary(input) result(lOut)
         implicit none
         character(len=*), intent(in)  ::  input                         !! A string.
@@ -229,6 +232,7 @@ contains
     !  <p>A logical value of `.FALSE.` will be returned where the `input`
     !  string is empty(only spaces), 0 length, or is not a valid
     !  signed octal integer string.
+    !  </p>
     pure logical function isOctal(input) result(lOut)
         implicit none
         character(len=*), intent(in)  ::  input                         !! A string.
@@ -274,6 +278,7 @@ contains
     !  <p>A logical value of `.FALSE.` will be returned where the `input`
     !  string is empty(only spaces), 0 length, or is not a valid
     !  unsigned octal integer string.
+    !  </p>
     pure logical function isUnsignedOctal(input) result(lOut)
         implicit none
         character(len=*), intent(in)  ::  input                         !! A string.
@@ -314,6 +319,7 @@ contains
     !  <p>A logical value of `.FALSE.` will be returned where the `input`
     !  string is empty(only spaces), 0 length, or is not a valid
     !  signed hexadecimal integer string.
+    !  </p>
     pure logical function isHex(input) result(lOut)
         implicit none
         character(len=*), intent(in)  ::  input                         !! A string.
@@ -367,6 +373,7 @@ contains
     !  <p>A logical value of `.FALSE.` will be returned where the `input`
     !  string is empty(only spaces), 0 length, or is not a valid
     !  unsigned hexadecimal integer string.
+    !  </p>
     pure logical function isUnsignedHex(input) result(lOut)
         implicit none
         character(len=*), intent(in)  ::  input                         !! A string.

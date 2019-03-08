@@ -227,6 +227,7 @@ contains
     !
     !  <p>Compare two strings as binary strings by parsing them to int64
     !  values first.
+    !  </p>
     !
     !  @note  Binary strings are being parsed as bits represented by binary
     !         digits to a signed type.

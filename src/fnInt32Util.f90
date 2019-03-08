@@ -111,6 +111,7 @@ contains
     !  Values within the return string will always be right justified. 
     !  Whitespaces will fill the left side of the return string if there
     !  is not enough values to fill the string.
+    !  </p>
     pure character(len=33) function int32ToBinary(input) result(strOut)
         implicit none
         integer(k_int32), intent(in)  ::  input                         !! An int32 value.
@@ -213,6 +214,7 @@ contains
     !  Values within the return string will always be right justified. 
     !  Whitespaces will fill the left side of the return string if there
     !  is not enough values to fill the string.
+    !  </p>
     pure character(len=12) function int32ToOctal(input) result(strOut)
         implicit none
         integer(k_int32), intent(in)  ::  input                         !! An int32 value.
@@ -311,6 +313,7 @@ contains
     !  Values within the return string will always be right justified. 
     !  Whitespaces will fill the left side of the return string if there
     !  is not enough values to fill the string.
+    !  </p>
     pure character(len=9) function int32ToHex(input) result(strOut)
         implicit none
         integer(k_int32), intent(in)  ::  input                         !! An int32 value.

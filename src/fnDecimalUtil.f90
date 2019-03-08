@@ -321,6 +321,7 @@ contains
     !
     !  <p>Compare two strings as signed decimal integer strings by 
     !  parsing them to int32 values first.
+    !  </p>
     !
     !  @see  [[decToInt32]]
     pure subroutine decCompareAsInt32(firstString, secondString, output, error)
