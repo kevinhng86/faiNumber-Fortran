@@ -2,7 +2,7 @@
 
 How fast is faiNumber-Fortran?
 
-The below are benchmark results for faiNumber-Fortran(v.1.0.0.f)
+The below are benchmark results for faiNumber-Fortran(Version 1n.0.0.f)
 comparing to the read() method of Fortran. Each test ran 3 times and the
 average result from all 3 runs is used as the result. Results are in
 seconds with 3 decimal placement. For the result, the lower is the better.

@@ -35,10 +35,9 @@ parsing. The input strings can either be trimmed or untrimed of both
 leading and trailing whitespaces. An optional startpos and endpos
 implementation also give the flexibility of where to start in the strings.
 faiNumber-Fortran also provides procedures for comparing numerical
-strings of unlimited length (constrain by memory and time) length.
-When it comes to errors, faiNumber-Fortran give back an error code or
-an error status so that the user can handle errors based on their
-specific needs.
+strings of unlimited length (constrain by memory and time). When it comes
+to errors, faiNumber-Fortran give back an error code or an error status
+so that the user can handle errors based on their specific needs.
 
 faiNumber-Fortran is an extremely fast numerical library. For Fortran,
 faiNumber-Fortran may be the fastest library for numerical string
@@ -61,7 +60,7 @@ procedures of this library were built for expert usage. The previous is
 especially true for any assume**** procedures that provide by this library.
 
 ## Benchmark
-<a href="https://github.com/kevinhng86/faiNumber-Fortran/blob/master/benchmark.md">Benchmark</a>
+<a href="https://github.com/kevinhng86/faiNumber-Fortran/blob/v1n/benchmark.md">Benchmark</a>
 
 ## Help
 <!-- a href="https://lib.fai.host/fortran/faiNumber/v1n/">faiNumber's API Documentation</a -->.
@@ -69,5 +68,5 @@ especially true for any assume**** procedures that provide by this library.
 ## License
 <a href="https://github.com/kevinhng86/faiNumber-Fortran/blob/master/LICENSE">MIT</a>
 
-## Version Note
+## Version Note For 1n.0.0.f
 Procedures of this version are not or may not be pure procedures.
