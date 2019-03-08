@@ -26,6 +26,7 @@
 !
 !  <p>This module, <code>fniConsts64</code> contains constant values for
 !  modules that deal with 64-bit ints.
+!  </p>
 module fniConsts64
     implicit none
     integer         , parameter  ::  k_int64 = selected_int_kind(18)    !! An integer value for int64's kind.

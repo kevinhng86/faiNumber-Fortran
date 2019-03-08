@@ -125,6 +125,7 @@ contains
     !  Values within the return string will always be right justified. 
     !  Whitespaces will fill the left side of the return string if there
     !  is not enough values to fill the string.
+    !  </p>
     character(len=65) function int64ToBinary(input) result(strOut)
         implicit none
         integer(k_int64), intent(in)  ::  input                         !! An int64 value.
@@ -262,6 +263,7 @@ contains
     !  Values within the return string will always be right justified. 
     !  Whitespaces will fill the left side of the return string if there
     !  is not enough values to fill the string.
+    !  </p>
     character(len=23) function int64ToOctal(input) result (strOut)
         implicit none
         integer(k_int64), intent(in)  ::  input                         !! An int64 value.
@@ -384,6 +386,7 @@ contains
     !  Values within the return string will always be right justified. 
     !  Whitespaces will fill the left side of the return string if there
     !  is not enough values to fill the string.
+    !  </p>
     character(len=17) function int64ToHex(input) result(strOut)
         implicit none
         integer(k_int64), intent(in)  ::  input                         !! An int64 value.

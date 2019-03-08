@@ -26,6 +26,7 @@
 !
 !  <p>This module, <code>fniConsts128</code> contains constant values for
 !  modules that deal with 128-bit ints.
+!  </p>
 module fniConsts128
     implicit none
     integer          , parameter  ::  k_int128 = selected_int_kind(38)  !! An integer value for int128's kind.

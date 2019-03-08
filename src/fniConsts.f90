@@ -27,6 +27,7 @@
 !  <p>This module, <code>fniConsts</code> contains constant values for
 !  faiNumber library, and constant values for modules that deal with 
 !  32-bit ints.
+!  </p>
 module fniConsts
     implicit none
     integer, parameter           ::  k_int32 = selected_int_kind(9)     !! An integer value for int32's kind.
