@@ -1,4 +1,17 @@
-# faiNumber-Fortran
+project: faiNumber-Fortran
+license: custom|||MIT|||https://github.com/kevinhng86/faiNumber-Fortran/blob/master/LICENSE
+summary: A fast, flexible, and secure numerical library for Fortran.
+author: Khang Hoang Nguyen
+facebook: https://www.facebook.com/kevin.ng.142035
+email: kevin@fai.host
+version: 1.0.0.f
+year: 2019
+graph: true
+project_github: https://github.com/kevinhng86/faiNumber-Fortran
+coloured_edges: true
+src_dir: ./src
+
+## Description
 
 faiNumber-Fortran is a fast, flexible, and secured numerical library for
 Fortran.

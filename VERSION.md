@@ -16,11 +16,13 @@ If the performance losses(if there is) to have all the procedures as
 pure procedures is not considerable(less than 100ms per 10 million executions),
 the future version of faiNumber will only support pure procedures.
 
-For the fnConst module's fnVersionNo, both versions, 1 and 1n will have
-the same version control number. However, fnPure of the same module
-if `.TRUE.` is version 1 and if `.FALSE.` is version 1n. fnPure will be
-removed from the second release if faiNumber's procedures are all or
-mostly pure procedures.
+For the modules' name, the name of the pure version's modules version
+is started with fn. While the name of the none pure version's modules
+is started with fni. For the fnConst and fniConsts modules, their
+fnVersionNo of both versions, 1 and 1n will have the same version control
+number. However, their fnPure constants if `.TRUE.` is version 1 and
+if `.FALSE.` is version 1n. fnPure will be removed from the second
+release if faiNumber-Fortran stop supporting the none pure version.
 
 Take note that the method of how to call an API of the pure build
 version and the none pure build version may not be the same. Thus,
