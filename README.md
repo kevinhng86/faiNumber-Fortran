@@ -50,10 +50,10 @@ especially true for any assume**** procedures that provide by this library.
 <a href="https://github.com/kevinhng86/faiNumber-Fortran/blob/v1/benchmark.md">Benchmark</a>
 
 ## Help
-<!-- a href="https://lib.fai.host/fortran/faiNumber/v1/">faiNumber's API Documentation</a -->.
+<a href="https://lib.fai.host/fortran/faiNumber/v1/">Version 1.0.0.f Documentation</a>.
 
 ## License
-<a href="https://github.com/kevinhng86/faiNumber-Fortran/blob/master/LICENSE">MIT</a>
+<a href="https://github.com/kevinhng86/faiNumber-Fortran/blob/v1/LICENSE">MIT</a>
 
 ## Version Note For 1.0.0.f
 Procedures of this version are pure procedures.

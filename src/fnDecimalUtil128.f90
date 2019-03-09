@@ -58,8 +58,8 @@ contains
     !     string.
     !  </p>
     !
-    !  @see  <a href="//lib.fai.host/fortran/faiNumber/v1/startpos-endpos-explanation.html">
-    !        startpos & endpos explanation</a>.
+    !  @see  <a href="|url|/page/startpos-endpos-explanation.html">
+    !        startpos & endpos explanation</a>
     pure subroutine decToInt128(input, output, error, startpos, endpos)
         implicit none 
         character(len=*) , intent(in)            ::  input              !! A string to be parsed as a signed decimal integer string to an int128 value.
@@ -171,10 +171,10 @@ contains
     !  5 - Invalid argument endpos/startpos
     !  </p>
     !
-    !  @see  <a href="//lib.fai.host/fortran/faiNumber/v1/startpos-endpos-explanation.html">
-    !        startpos & endpos explanation</a>.
+    !  @note  This subroutine may take longer on unsuccessful parse cases.
     !
-    !  @note  This subroutine may take longer on unsuccessful parse cases.    
+    !  @see  <a href="|url|/page/startpos-endpos-explanation.html">
+    !        startpos & endpos explanation</a>
     pure subroutine decToInt128TrueError(input, output, error, startpos, endpos)
         implicit none 
         character(len=*) , intent(in)            ::  input              !! A string to be parsed as a signed decimal integer string to an int128 value.
