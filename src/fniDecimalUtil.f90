@@ -58,8 +58,8 @@ contains
     !     string.
     !  </p>
     !
-    !  @see  <a href="//lib.fai.host/fortran/faiNumber/v1/startpos-endpos-explanation.html">
-    !        startpos & endpos explanation</a>.
+    !  @see  <a href="|url|/page/startpos-endpos-explanation.html">
+    !        startpos & endpos explanation</a>
     logical function decToInt32(input, output, startpos, endpos) result(error) 
         implicit none 
         character(len=*), intent(in)            ::  input               !! A string to be parsed as a signed decimal integer string to an int32 value.
@@ -204,10 +204,10 @@ contains
     !  5 - Invalid argument endpos/startpos
     !  </p>
     !
-    !  @see  <a href="//lib.fai.host/fortran/faiNumber/v1/startpos-endpos-explanation.html">
-    !        startpos & endpos explanation</a>.
-    !
     !  @note  This function may take longer on unsuccessful parse cases.
+    !
+    !  @see  <a href="|url|/page/startpos-endpos-explanation.html">
+    !        startpos & endpos explanation</a>
     integer(k_int32) function decToInt32TrueError(input, output, startpos, endpos) result(error)
         implicit none 
         character(len=*), intent(in)            ::  input               !! A string to be parsed as a signed decimal integer string to an int32 value.

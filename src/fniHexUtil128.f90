@@ -64,8 +64,8 @@ contains
     !  5. If the `input` string is not a valid hexadecimal string.
     !  </p>
     !
-    !  @see  <a href="//lib.fai.host/fortran/faiNumber/v1/startpos-endpos-explanation.html">
-    !        startpos & endpos explanation</a>.
+    !  @see  <a href="|url|/page/startpos-endpos-explanation.html">
+    !        startpos & endpos explanation</a>
     logical function hexToInt128(input, output, startpos, endpos) result(error) 
         implicit none 
         character(len=*) , intent(in)            ::  input              !! A string to be parsed as a hexadecimal string to an int128 value.
@@ -158,10 +158,10 @@ contains
     !  5 - Invalid argument endpos/startpos<br>
     !  </p>
     !
-    !  @see  <a href="//lib.fai.host/fortran/faiNumber/v1/startpos-endpos-explanation.html">
-    !        startpos & endpos explanation</a>.
-    !
     !  @note  This function may take longer on unsuccessful parse cases.
+    !
+    !  @see  <a href="|url|/page/startpos-endpos-explanation.html">
+    !        startpos & endpos explanation</a>
     integer(k_int32) function hexToInt128TrueError(input, output, startpos, endpos) result(error)
         implicit none 
         character(len=*) , intent(in)            ::  input              !! A string to be parsed as a hexadecimal string to an int128 value.
