@@ -48,10 +48,16 @@ procedures of this library were built for expert usage. The previous is
 especially true for any assume**** procedures that provide by this library.
 
 ## Benchmark
-<a href="https://github.com/kevinhng86/faiNumber-Fortran/blob/v1n/benchmark.md">1n.0.0.f</a>
-
-## Help
-<!-- a href="https://lib.fai.host/fortran/faiNumber/v1n/">faiNumber's API Documentation</a -->.
+<ol>
+<li><a href="https://github.com/kevinhng86/faiNumber-Fortran/blob/v1/benchmark.md">1.0.0.f</a></li>
+<li><a href="https://github.com/kevinhng86/faiNumber-Fortran/blob/v1n/benchmark.md">1n.0.0.f</a></li>
+</ol>
 
 ## License
 <a href="https://github.com/kevinhng86/faiNumber-Fortran/blob/master/LICENSE">MIT</a>
+
+## Versions
+<ol>
+<li><a href="https://github.com/kevinhng86/faiNumber-Fortran/tree/v1">1.0.0.f</a></li>
+<li><a href="https://github.com/kevinhng86/faiNumber-Fortran/tree/v1n/">1n.0.0.f</a></li>
+</ol>
