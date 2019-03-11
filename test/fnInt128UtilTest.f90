@@ -24,17 +24,17 @@ program fnInt128UtilTest
     logical  ::  error
     
     call int128ToBinaryAsUTest(error)
-    if ( error ) stop
+    if ( error ) stop 1
     call int128ToBinaryTest(error)
-    if ( error ) stop
+    if ( error ) stop 1
     call int128ToOctalAsUTest(error)
-    if ( error ) stop
+    if ( error ) stop 1
     call int128ToOctalTest(error)
-    if ( error ) stop
+    if ( error ) stop 1
     call int128ToHexAsUTest(error)
-    if ( error ) stop
+    if ( error ) stop 1
     call int128ToHexTest(error)
-    if ( error ) stop
+    if ( error ) stop 1
 end program
 
 subroutine int128ToBinaryAsUTest(error)

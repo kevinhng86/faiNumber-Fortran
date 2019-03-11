@@ -39,13 +39,13 @@ program fnOctalUtilTest
     logical  ::  error
     
     call octalToInt32Test(error)
-    if ( error ) stop
+    if ( error ) stop 1
     call octalToInt32TrueErrorTest(error)
-    if ( error ) stop
+    if ( error ) stop 1
     call octalCompareAsInt32Test(error)
-    if ( error ) stop
+    if ( error ) stop 1
     call octalInt32OrSmallerTest(error)
-    if ( error ) stop
+    if ( error ) stop 1
 end program
 
 subroutine octalToInt32Test(error)
