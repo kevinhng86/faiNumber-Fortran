@@ -27,7 +27,7 @@
 compiler="gfortran"
 compiler_flag=""
 static_or_dynamic=0
-build_type=0            # <- 0 - All; 1 - Separate units; 2 - All in one
+build_type=0            # <- 0 - all-in-one; 1 - separate units
 read_temp=""
 
 ##################### Custom gfortran command  #########################
