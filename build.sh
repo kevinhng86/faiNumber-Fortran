@@ -23,11 +23,11 @@
 # SOFTWARE.
 
 # Any help with the build file(s) are welcome.
-# faiNumber build file for gfortran, (Ubuntu 18.04).
+# faiNumber build file for gfortran.
 compiler="gfortran"
 compiler_flag=""
 static_or_dynamic=0
-build_type=0            # <- 0 - all-in-one; 1 - separate units
+build_type=0            # <- 0 - All; 1 - Separate units; 2 - All in one
 read_temp=""
 
 ##################### Custom gfortran command  #########################
@@ -90,6 +90,7 @@ file_all=("${file_consts[@]}" "${file_32[@]}" "${file_64[@]}" "${file_128[@]}")
 compiled_o_files=()
 compiled_mod_files=()
 if [ ${#file_all[@]} -ne $file_count ]; then
+    echo "Error: Incorrect build script setup."
     echo "${#file_all[@]}"
     exit 1
 fi
@@ -102,7 +103,7 @@ do
 done
 if [ "${#file_missing[@]}" -gt 0 ]; then
     echo "${#file_missing[@]}"
-    echo "Error: Missing file in repo. The following file(s) is/are missing: "
+    echo "Error: Missing file in the repo. The following file(s) is/are missing: "
     for file in "${file_missing[@]}"
     do
         echo "$file"
@@ -164,10 +165,16 @@ if [ ! -z "$fortran_version" ]; then
 fi 
 
 if [ -d "$dir_output" ]; then
-    rm -rf "$dir_output" || exit 1
+    if ! rm -rf "$dir_output"; then
+        echo "Error: output directory '$dir_output' existed, but couldn't be removed"
+        exit 1
+    fi
 fi
 if [ -d "$dir_temp" ]; then
-    rm -rf "$dir_temp" || exit 1
+    if ! rm -rf "$dir_temp"; then
+        echo "Error: temp directory '$dir_temp' existed but couldn't be removed"
+        exit 1
+    fi
 fi
 
 if ! mkdir "$dir_temp"; then
@@ -250,13 +257,13 @@ for file in "${compiled_mod_files[@]}"
 do
     if ! mv "${dir_temp}/${file}" "${dir_mod}/${file}"; then
         echo "Error: Couldn't move the mod files."
-        exit 1 1
+        exit 1
     fi
 done
 
 if ! rm -rf "${dir_temp}"; then
     echo "Error:  Can't remove ${dir_temp} * files."
-    exit_with_code 1
+    exit_with_code 1 0
 fi
 
 echo "Run test(y) or exit?: "
@@ -307,7 +314,7 @@ if [ "$going_to_run_test" == "y" ]; then
         fi
         
         if ! "$file_exe"; then
-            echo "Couldn't run test build file"
+            echo "Couldn't run test build file or the test failed."
             exit_with_code 1 2
         fi
     done
