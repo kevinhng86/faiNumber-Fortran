@@ -528,7 +528,7 @@ if [ "$going_to_run_test" == "y" ]; then
     fi
 
     echo "##############################################################"
-    echo "All test that was presented passed."
+    echo "Tests passed for the all the test file that were present."
     echo "##############################################################"
 fi
 
