@@ -36,13 +36,13 @@ program fnDecimalUtilTest
     logical  ::  error
     
     call decToInt32Test(error)
-    if ( error ) stop
+    if ( error ) stop 1
     call decToInt32TrueErrorTest(error)
-    if ( error ) stop
+    if ( error ) stop 1
     call decCompareTest32(error)
-    if ( error ) stop
+    if ( error ) stop 1
     call decInt32OrSmallerTest(error)
-    if ( error ) stop
+    if ( error ) stop 1
 end program
 
 subroutine decToInt32Test(error)

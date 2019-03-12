@@ -39,13 +39,13 @@ program fnHexUtil128Test
     logical  ::  error
 
     call hexToInt128Test(error)
-    if ( error ) stop
+    if ( error ) stop 1
     call hexToInt128TrueErrorTest(error)
-    if ( error ) stop
+    if ( error ) stop 1
     call hexCompareAsInt128Test(error)
-    if ( error ) stop
+    if ( error ) stop 1
     call hexInt128OrSmallerTest(error)
-    if ( error ) stop
+    if ( error ) stop 1
 end program
 
 subroutine hexToInt128Test(error)
