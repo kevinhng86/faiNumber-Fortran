@@ -116,9 +116,7 @@ file_64=("fnBinaryUtil64.f90" "fnDecimalUtil64.f90" "fnHexUtil64.f90" \
 file_128=("fnBinaryUtil128.f90" "fnDecimalUtil128.f90" "fnHexUtil128.f90" \
           "fnOctalUtil128.f90" "fnInt128Util.f90")
 file_count=19
-file_test_count=16
 file_missing=()
-file_test_missing=()
 file_test_32=("fnBinaryUtilTest.f90" "fnDecimalUtilTest.f90" \
               "fnHexUtilTest.f90" "fnInt32UtilTest.f90" "fnOctalUtilTest.f90" \
               "fnNumberStringUtilTest.f90")
@@ -126,6 +124,8 @@ file_test_64=("fnBinaryUtil64Test.f90" "fnDecimalUtil64Test.f90" \
               "fnHexUtil64Test.f90" "fnInt64UtilTest.f90" "fnOctalUtil64Test.f90")
 file_test_128=("fnBinaryUtil128Test.f90" "fnDecimalUtil128Test.f90" \
                "fnHexUtil128Test.f90" "fnInt128UtilTest.f90" "fnOctalUtil128Test.f90")
+file_test_count=16
+file_test_missing=()
 compiled_o_files=()
 compiled_mod_files=()
 if [ $((${#file_consts[@]} + ${#file_32[@]} + ${#file_64[@]} + ${#file_128[@]})) \
@@ -179,7 +179,7 @@ fi
 
 #################### Getting user input for options ####################
 fortran_version=""
-echo "Fortran version(legacy, f95, f2003, f2018) or empty?"
+echo "Fortran version(i.e. legacy, f95, f2003, f2008, f2018) or empty?"
 read -r fortran_version
 if [ ! -z "$fortran_version" ]; then
     fortran_version="-std=$fortran_version"
