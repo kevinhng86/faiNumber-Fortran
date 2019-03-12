@@ -24,10 +24,22 @@
 
 # Any help with the build file(s) are welcome.
 # faiNumber build file for gfortran.
+#
+# @note  This file supports building the library with individual support
+#        to 32/64/128-bit. If 128-bit support is not available. Build a 64
+#        and a 32-bit libary file then combine the "mod" directory 
+#        together.
+#        
+#        Take note that currently this script will always delete the
+#        output directory if it existed.
 compiler="gfortran"
 compiler_flag=""
 static_or_dynamic=0
-build_type=0            # <- 0 - All; 1 - Separate units; 2 - All in one
+build_type=0            # <- 0 - all-in-one
+                        #    1 - individual library file
+                        #   32 - 32-bit library only
+                        #   64 - 64-bit library only
+                        #  128 - 128-bit library only
 read_temp=""
 
 ##################### Custom gfortran command  #########################
@@ -69,6 +81,25 @@ function exit_with_code() {
     fi
     exit "$code"
 }
+
+# @note  The compile_single() function should only be use after the 
+#        compile_o_files and compile_mod_files variable have been
+#        declared.
+function compile_single(){
+    local file=$1
+    local compiler=$2
+    local compiler_flag=$3
+    local file_name="${file%.*}"
+    local file_o="${dir_temp}/${file_name}.o"
+    local file_mod="${file_name,,}.mod"
+ 
+    if ! eval "${compiler} ${compiler_flag} -J ${dir_temp}/ -c ${dir_src}/${file} -o ${file_o}"; then
+        exit_with_code 1 1
+    fi
+    
+    compiled_o_files+=("$file_o")
+    compiled_mod_files+=("$file_mod")
+}
 ############################# End functions ############################
 
 ############## Verify if all the file in the repo existed ##############
@@ -85,20 +116,36 @@ file_64=("fnBinaryUtil64.f90" "fnDecimalUtil64.f90" "fnHexUtil64.f90" \
 file_128=("fnBinaryUtil128.f90" "fnDecimalUtil128.f90" "fnHexUtil128.f90" \
           "fnOctalUtil128.f90" "fnInt128Util.f90")
 file_count=19
+file_test_count=16
 file_missing=()
-file_all=("${file_consts[@]}" "${file_32[@]}" "${file_64[@]}" "${file_128[@]}")
+file_test_missing=()
+file_test_32=("fnBinaryUtilTest.f90" "fnDecimalUtilTest.f90" \
+              "fnHexUtilTest.f90" "fnInt32UtilTest.f90" "fnOctalUtilTest.f90" \
+              "fnNumberStringUtilTest.f90")
+file_test_64=("fnBinaryUtil64Test.f90" "fnDecimalUtil64Test.f90" \
+              "fnHexUtil64Test.f90" "fnInt64UtilTest.f90" "fnOctalUtil64Test.f90")
+file_test_128=("fnBinaryUtil128Test.f90" "fnDecimalUtil128Test.f90" \
+               "fnHexUtil128Test.f90" "fnInt128UtilTest.f90" "fnOctalUtil128Test.f90")
 compiled_o_files=()
 compiled_mod_files=()
-if [ ${#file_all[@]} -ne $file_count ]; then
+if [ $((${#file_consts[@]} + ${#file_32[@]} + ${#file_64[@]} + ${#file_128[@]})) \
+     -ne $file_count ]; then
     echo "Error: Incorrect build script setup."
-    echo "${#file_all[@]}"
+    echo $((${#file_consts[@]} + ${#file_32[@]} + ${#file_64[@]} + ${#file_128[@]}))
     exit 1
 fi
+if [ $((${#file_test_32[@]} + ${#file_test_64[@]} + ${#file_test_128[@]})) \
+     -ne $file_test_count ]; then
+    echo "Warning: Incorrect build script setup. Test file count mismatch."
+    echo "It may not be possible to executed all test."
+    echo $((${#file_test_32[@]} + ${#file_test_64[@]} + ${#file_test_128[@]}))
+    echo ""
+fi
 
-for file in "${file_all[@]}"
+for file in "${file_consts[@]}" "${file_32[@]}" "${file_64[@]}" "${file_128[@]}"
 do
-    if [ ! -f "$dir_src/$file" ]; then
-        file_missing+=("$file")
+    if [ ! -f "${dir_src}/${file}" ]; then
+        file_missing+=("${dir_src}/${file}")
     fi
 done
 if [ "${#file_missing[@]}" -gt 0 ]; then
@@ -109,6 +156,24 @@ if [ "${#file_missing[@]}" -gt 0 ]; then
         echo "$file"
     done
     exit 1
+fi
+
+for file in "${file_test_32[@]}" "${file_test_64[@]}" "${file_test_128[@]}"
+do
+    if [ ! -f "${dir_test}/${file}" ]; then
+        file_test_missing+=("${dir_test}/${file}")
+    fi
+done
+if [ "${#file_test_missing[@]}" -gt 0 ]; then
+    echo "${#file_test_missing[@]}"
+    echo "Warning: Missing test file in the repo."
+    echo "It may not be possible to executed all test."
+    echo "The following test file(s) is/are missing:"
+    for file in "${file_test_missing[@]}"
+    do
+        echo "${file}"
+    done
+    echo ""
 fi
 ############ End verify if all the file in the repo existed ############
 
@@ -135,17 +200,26 @@ if [ ! -z "$read_temp" ]; then
 fi
 echo ""
 
-echo "Build type(0, 1) or empty for all-in-one:"
-echo "0 - All in one file."
-echo "1 - Invidual libary file for 32/64/128 bits."
+echo "Build type(0, 1, 32, 64, 128) or empty for default(0):"
+echo "0 - All-in-one file."
+echo "1 - Individual libary file for 32/64/128 bits."
+echo "32 - Build 32-bit library only."
+echo "64 - Build 64-bit library only."
+echo "128 - Build 128-bit library only."
 read -r read_temp
 if [ ! -z "$read_temp" ]; then
     if [ "$read_temp" == "0" ]; then
         build_type=0
     elif [ "$read_temp" == "1" ]; then
         build_type=1
+    elif [ "$read_temp" == "32" ]; then
+        build_type=32
+    elif [ "$read_temp" == "64" ]; then
+        build_type=64
+    elif [ "$read_temp" == "128" ]; then
+        build_type=128
     else
-        echo "Error: Unknown option. 0 for all-in-one, 1 for individual lib files."
+        echo "Error: Unknown option. Only support(0, 1, 32, 64, or 128)."
         exit 1
     fi
 fi
@@ -190,19 +264,63 @@ if ! mkdir "$dir_mod"; then
     exit 1
 fi 
 
-for file in "${file_all[@]}"
-do
-    file_name="${file%.*}"
-    file_o="${dir_temp}/${file_name}.o"
-    file_mod="${file_name,,}.mod"
+### Compile the consts file first depended on mode.
+compile_single "${file_consts[0]}" "${compiler}" "${compiler_flag}"
+if [ $build_type -eq 0 ] || [ $build_type -eq 1 ] || [ $build_type -eq 64 ]; then
+    compile_single "${file_consts[1]}" "${compiler}" "${compiler_flag}"
+fi
+if [ $build_type -eq 0 ] || [ $build_type -eq 1 ] || [ $build_type -eq 128 ]; then
+    compile_single "${file_consts[2]}" "${compiler}" "${compiler_flag}"
+fi
+
+### Compiling 32 if $build_type is 0, 1, or 32
+if [ $build_type -eq 0 ] || [ $build_type -eq 1 ] || [ $build_type -eq 32 ]; then
+    for file in "${file_32[@]}"
+    do
+        file_name="${file%.*}"
+        file_o="${dir_temp}/${file_name}.o"
+        file_mod="${file_name,,}.mod"
     
-    if ! eval "${compiler} ${compiler_flag} -J ${dir_temp}/ -c ${dir_src}/${file} -o ${file_o}"; then
-        exit_with_code 1 1
-    fi
+        if ! eval "${compiler} ${compiler_flag} -J ${dir_temp}/ -c ${dir_src}/${file} -o ${file_o}"; then
+            exit_with_code 1 1
+        fi
     
-    compiled_o_files+=("$file_o")
-    compiled_mod_files+=("$file_mod")
-done
+        compiled_o_files+=("$file_o")
+        compiled_mod_files+=("$file_mod")
+    done
+fi
+### Compiling 64 if $build_type is  0, 1, or 64
+if [ $build_type -eq 0 ] || [ $build_type -eq 1 ] || [ $build_type -eq 64 ]; then
+    for file in "${file_64[@]}"
+    do
+        file_name="${file%.*}"
+        file_o="${dir_temp}/${file_name}.o"
+        file_mod="${file_name,,}.mod"
+    
+        if ! eval "${compiler} ${compiler_flag} -J ${dir_temp}/ -c ${dir_src}/${file} -o ${file_o}"; then
+            exit_with_code 1 1
+        fi
+    
+        compiled_o_files+=("$file_o")
+        compiled_mod_files+=("$file_mod")
+    done
+fi
+### Compiling 128 if $build_type is  0, 1, or 128
+if [ $build_type -eq 0 ] || [ $build_type -eq 1 ] || [ $build_type -eq 128 ]; then
+    for file in "${file_128[@]}"
+    do
+        file_name="${file%.*}"
+        file_o="${dir_temp}/${file_name}.o"
+        file_mod="${file_name,,}.mod"
+    
+        if ! eval "${compiler} ${compiler_flag} -J ${dir_temp}/ -c ${dir_src}/${file} -o ${file_o}"; then
+            exit_with_code 1 1
+        fi
+    
+        compiled_o_files+=("$file_o")
+        compiled_mod_files+=("$file_mod")
+    done
+fi
 
 if [ $build_type -eq 0 ]; then
     if [ $static_or_dynamic -eq 0 ]; then
@@ -212,52 +330,68 @@ if [ $build_type -eq 0 ]; then
     fi
 fi
 
-if [ $build_type -eq 1 ]; then
-    compiled_o_files_str=""
-    for file in "${file_32[@]}"
-    do
-        compiled_o_files_str="${compiled_o_files_str} ${dir_temp}/${file%.*}.o"
-    done
-    if [ $static_or_dynamic -eq 0 ]; then
-        eval "ar rcs ${dir_output}/faiNumber32.a " \
-        "${compiled_o_files_str}" "${compiled_o_files[0]}"
-    elif [ $static_or_dynamic -eq 1 ]; then
-        eval "${compiler} -shared ${compiled_o_files_str} ${compiled_o_files[0]} " \
-        "-o ${dir_output}/faiNumber32.so"
+if [ $build_type -ne 0 ]; then
+    if [ $build_type -eq 1 ] || [ $build_type -eq 32 ]; then
+        compiled_o_files_str="${compiled_o_files[0]}"
+        
+        for file in "${file_32[@]}"
+        do
+            compiled_o_files_str="${compiled_o_files_str} ${dir_temp}/${file%.*}.o"
+        done
+        
+        if [ $static_or_dynamic -eq 0 ]; then
+            eval "ar rcs ${dir_output}/faiNumber32.a " \
+            "${compiled_o_files_str}" "${compiled_o_files[0]}"
+        elif [ $static_or_dynamic -eq 1 ]; then
+            eval "${compiler} -shared ${compiled_o_files_str} " \
+            "-o ${dir_output}/faiNumber32.so"
+        fi
     fi
 
-    compiled_o_files_str=""
-    for file in "${file_64[@]}"
-    do
-        compiled_o_files_str="${compiled_o_files_str} ${dir_temp}/${file%.*}.o"
-    done
-    if [ $static_or_dynamic -eq 0 ]; then
-        eval "ar rcs ${dir_output}/faiNumber64.a " \
-        "${compiled_o_files_str} ${compiled_o_files[0]} ${compiled_o_files[1]}"
-    elif [ $static_or_dynamic -eq 1 ]; then
-        eval "${compiler} -shared ${compiled_o_files_str} ${compiled_o_files[0]} ${compiled_o_files[1]} " \
-        "-o ${dir_output}/faiNumber64.so"
-    fi    
+    if [ $build_type -eq 1 ] || [ $build_type -eq 64 ]; then
+        compiled_o_files_str="${compiled_o_files[0]} ${compiled_o_files[1]}"
+        
+        for file in "${file_64[@]}"
+        do
+            compiled_o_files_str="${compiled_o_files_str} ${dir_temp}/${file%.*}.o"
+        done
+        
+        if [ $static_or_dynamic -eq 0 ]; then
+            eval "ar rcs ${dir_output}/faiNumber64.a " \
+            "${compiled_o_files_str}"
+        elif [ $static_or_dynamic -eq 1 ]; then
+            eval "${compiler} -shared ${compiled_o_files_str} " \
+            "-o ${dir_output}/faiNumber64.so"
+        fi
+    fi
 
-    compiled_o_files_str=""
-    for file in "${file_128[@]}"
-    do
-        compiled_o_files_str="${compiled_o_files_str} ${dir_temp}/${file%.*}.o"
-    done
-    if [ $static_or_dynamic -eq 0 ]; then
-        eval "ar rcs ${dir_output}/faiNumber128.a " \
-        "${compiled_o_files_str} ${compiled_o_files[0]} ${compiled_o_files[2]}"
-    elif [ $static_or_dynamic -eq 1 ]; then
-        eval "${compiler} -shared ${compiled_o_files_str} ${compiled_o_files[0]} ${compiled_o_files[2]} " \
-        "-o ${dir_output}/faiNumber128.so"
-    fi    
+    if [ $build_type -eq 1 ] || [ $build_type -eq 128 ]; then
+        if [ $build_type -eq 1 ]; then
+            compiled_o_files_str="${compiled_o_files[0]} ${compiled_o_files[2]}"
+        elif [ $build_type -eq 128 ]; then
+            compiled_o_files_str="${compiled_o_files[0]} ${compiled_o_files[1]}"
+        fi
+        
+        for file in "${file_128[@]}"
+        do
+            compiled_o_files_str="${compiled_o_files_str} ${dir_temp}/${file%.*}.o"
+        done
+        
+        if [ $static_or_dynamic -eq 0 ]; then
+            eval "ar rcs ${dir_output}/faiNumber128.a " \
+            "${compiled_o_files_str}"
+        elif [ $static_or_dynamic -eq 1 ]; then
+            eval "${compiler} -shared ${compiled_o_files_str} " \
+            "-o ${dir_output}/faiNumber128.so"
+        fi
+    fi
 fi
 
 for file in "${compiled_mod_files[@]}"
 do
     if ! mv "${dir_temp}/${file}" "${dir_mod}/${file}"; then
         echo "Error: Couldn't move the mod files."
-        exit 1
+        exit_with_code 1 1
     fi
 done
 
@@ -290,6 +424,12 @@ if [ "$going_to_run_test" == "y" ]; then
         include_files="${dir_output}/faiNumber32${include_extension} "
         include_files+="${dir_output}/faiNumber64${include_extension} "
         include_files+="${dir_output}/faiNumber128${include_extension}"
+    elif [ $build_type -eq 32 ]; then
+        include_files="${dir_output}/faiNumber32${include_extension} "
+    elif [ $build_type -eq 64 ]; then
+        include_files="${dir_output}/faiNumber64${include_extension} "
+    elif [ $build_type -eq 128 ]; then
+        include_files="${dir_output}/faiNumber128${include_extension} "
     fi
        
     if ! mkdir "$dir_temp"; then
@@ -297,30 +437,98 @@ if [ "$going_to_run_test" == "y" ]; then
         exit 1
     fi
     
-    for file in ${dir_test}/*.f90
-    do
-        file_name=$(basename "$file")
-        file_o="${dir_temp}/${file_name%.*}.o"
-        file_exe="${dir_temp}/${file_name%.*}$"
+    if [ $build_type -eq 0 ] || [ $build_type -eq 1 ] || [ $build_type -eq 32 ]; then
+        for file in "${file_test_32[@]}"
+        do
+            file_test="${dir_test}/${file}"
+            if [ ! -f "$file_test" ]; then
+                echo "Skipping test file '$file_test'. The file is missing."
+                continue
+            fi
+            
+            file_o="${dir_temp}/${file%.*}.o"
+            file_exe="${dir_temp}/${file%.*}$"
         
-        if ! eval "${compiler} -I $dir_mod -c $file -J $dir_temp -o ${file_o}"; then
-            echo "Can't compile test code"
-            exit_with_code 1 2
-        fi       
+            if ! eval "${compiler} -I $dir_mod -c $file_test -J $dir_temp -o ${file_o}"; then
+                echo "Can't compile test code"
+                exit_with_code 1 2
+            fi
+
+            if ! eval "${compiler} -I $dir_mod -o $file_exe $file_o ${include_files}"; then
+                echo "Can't make test code"
+                exit_with_code 1 2
+            fi
+            
+            echo "################# Executing file ${file_exe} ###########"
+            if ! "$file_exe"; then
+                echo "Couldn't run test build file or the test failed."
+                exit_with_code 1 2
+            fi
+        done
+    fi
+
+    if [ $build_type -eq 0 ] || [ $build_type -eq 1 ] || [ $build_type -eq 64 ]; then
+        for file in "${file_test_64[@]}"
+        do
+            file_test="${dir_test}/${file}"
+            if [ ! -f "$file_test" ]; then
+                echo "Skipping test file '$file_test'. The file is missing."
+                continue
+            fi
+
+            file_o="${dir_temp}/${file%.*}.o"
+            file_exe="${dir_temp}/${file%.*}$"
         
-        if ! eval "${compiler} -I $dir_mod -o $file_exe $file_o ${include_files}"; then
-            echo "Can't make test code"
-            exit_with_code 1 2
-        fi
+            if ! eval "${compiler} -I $dir_mod -c $file_test -J $dir_temp -o ${file_o}"; then
+                echo "Can't compile test code"
+                exit_with_code 1 2
+            fi
+
+            if ! eval "${compiler} -I $dir_mod -o $file_exe $file_o ${include_files}"; then
+                echo "Can't make test code"
+                exit_with_code 1 2
+            fi
+
+            echo "################# Executing file ${file_exe} ###########"
+            if ! "$file_exe"; then
+                echo "Couldn't run test build file or the test failed."
+                exit_with_code 1 2
+            fi
+        done
+    fi
+
+    if [ $build_type -eq 0 ] || [ $build_type -eq 1 ] || [ $build_type -eq 128 ]; then
+        for file in "${file_test_128[@]}"
+        do
+            file_test="${dir_test}/${file}"
+            if [ ! -f "$file_test" ]; then
+                echo "Skipping test file '$file_test'. The file is missing."
+                continue
+            fi
+
+            file_o="${dir_temp}/${file%.*}.o"
+            file_exe="${dir_temp}/${file%.*}$"
         
-        if ! "$file_exe"; then
-            echo "Couldn't run test build file or the test failed."
-            exit_with_code 1 2
-        fi
-    done
-    
+            if ! eval "${compiler} -I $dir_mod -c $file_test -J $dir_temp -o ${file_o}"; then
+                echo "Can't compile test code"
+                exit_with_code 1 2
+            fi
+
+            if ! eval "${compiler} -I $dir_mod -o $file_exe $file_o ${include_files}"; then
+                echo "Can't make test code"
+                exit_with_code 1 2
+            fi
+
+            echo "################# Executing file ${file_exe} ###########"
+            if ! "$file_exe"; then
+                echo "Couldn't run test build file or the test failed."
+                exit_with_code 1 2
+            fi
+        done
+    fi
+
     echo "##############################################################"
-    echo "All test passed."
+    echo "All test that was presented passed."
     echo "##############################################################"
 fi
 
