@@ -39,13 +39,13 @@ program fniBinaryUtilTest
     logical  ::  error
     
     call binaryToInt32Test(error)
-    if ( error ) stop
+    if ( error ) stop 1
     call binaryToInt32TrueErrorTest(error)
-    if ( error ) stop
+    if ( error ) stop 1
     call binaryCompareAsInt32Test(error)
-    if ( error ) stop
+    if ( error ) stop 1
     call binaryInt32OrSmallerTest(error)
-    if ( error ) stop
+    if ( error ) stop 1
 end program
 
 subroutine binaryToInt32Test(error)

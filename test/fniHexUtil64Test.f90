@@ -39,13 +39,13 @@ program fniHexUtil64Test
     logical  ::  error
     
     call hexToInt64Test(error)
-    if ( error ) stop
+    if ( error ) stop 1
     call hexToInt64TrueErrorTest(error)
-    if ( error ) stop
+    if ( error ) stop 1
     call hexCompareAsInt64Test(error)
-    if ( error ) stop
+    if ( error ) stop 1
     call hexInt64OrSmallerTest(error)
-    if ( error ) stop
+    if ( error ) stop 1
 end program
 
 subroutine hexToInt64Test(error)

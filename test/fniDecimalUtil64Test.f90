@@ -36,13 +36,13 @@ program fniDecimalUtilTest64
     logical  ::  error
     
     call decToInt64Test(error)
-    if ( error ) stop
+    if ( error ) stop 1
     call decToInt64TrueErrorTest(error)
-    if ( error ) stop
+    if ( error ) stop 1
     call decCompareTest64(error)
-    if ( error ) stop
+    if ( error ) stop 1
     call decInt64OrSmallerTest(error)
-    if ( error ) stop
+    if ( error ) stop 1
 end program
 
 subroutine decToInt64Test(error)

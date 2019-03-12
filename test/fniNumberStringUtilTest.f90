@@ -24,37 +24,37 @@ program fniNumberStringUtilTest
     logical  ::  error
 
     call isIntegerTest(error)
-    if ( error .eqv. .TRUE. ) stop
+    if ( error .eqv. .TRUE. ) stop 1
     call isUnsignedIntegerTest(error)
-    if ( error .eqv. .TRUE. ) stop
+    if ( error .eqv. .TRUE. ) stop 1
     call isBinaryTest(error)
-    if ( error .eqv. .TRUE. ) stop
+    if ( error .eqv. .TRUE. ) stop 1
     call isUnsignedBinaryTest(error);
-    if ( error .eqv. .TRUE. ) stop
+    if ( error .eqv. .TRUE. ) stop 1
     call isOctalTest(error)
-    if ( error .eqv. .TRUE. ) stop
+    if ( error .eqv. .TRUE. ) stop 1
     call isUnsignedOctalTest(error)
-    if ( error .eqv. .TRUE. ) stop
+    if ( error .eqv. .TRUE. ) stop 1
     call isHexTest(error)
-    if ( error .eqv. .TRUE. ) stop
+    if ( error .eqv. .TRUE. ) stop 1
     call isUnsignedHexTest(error)
-    if ( error .eqv. .TRUE. ) stop
+    if ( error .eqv. .TRUE. ) stop 1
     call isBaseTest(error)
-    if ( error .eqv. .TRUE. ) stop
+    if ( error .eqv. .TRUE. ) stop 1
     call isUnsignedBaseTest(error)
-    if ( error .eqv. .TRUE. ) stop
+    if ( error .eqv. .TRUE. ) stop 1
     call assumeIsOddTest(error)
-    if ( error .eqv. .TRUE. ) stop
+    if ( error .eqv. .TRUE. ) stop 1
     call assumeIsEvenTest(error)
-    if ( error .eqv. .TRUE. ) stop
+    if ( error .eqv. .TRUE. ) stop 1
     call assumeCompareTest(error)
-    if ( error .eqv. .TRUE. ) stop
+    if ( error .eqv. .TRUE. ) stop 1
     call assumeCompareAllBaseTest(error)
-    if ( error .eqv. .TRUE. ) stop
+    if ( error .eqv. .TRUE. ) stop 1
     call fnStringCompareTest(error)
-    if ( error .eqv. .TRUE. ) stop
+    if ( error .eqv. .TRUE. ) stop 1
     call fnStringCompareAsBaseTest(error)
-    if ( error .eqv. .TRUE. ) stop
+    if ( error .eqv. .TRUE. ) stop 1
 end program
 
 subroutine isIntegerTest(error)

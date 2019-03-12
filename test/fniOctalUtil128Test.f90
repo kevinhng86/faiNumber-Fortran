@@ -39,13 +39,13 @@ program fniOctalUtil128Test
     logical  ::  error
     
     call octalToInt128Test(error)
-    if ( error ) stop
+    if ( error ) stop 1
     call octalToInt128TrueErrorTest(error)
-    if ( error ) stop
+    if ( error ) stop 1
     call octalCompareAsInt128Test(error)
-    if ( error ) stop    
+    if ( error ) stop 1    
     call octalInt128OrSmallerTest(error)
-    if ( error ) stop
+    if ( error ) stop 1
 end program
 
 subroutine octalToInt128Test(error)

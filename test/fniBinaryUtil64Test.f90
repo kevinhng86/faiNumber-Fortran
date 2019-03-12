@@ -39,13 +39,13 @@ program fniBinaryUtil64Test
     logical  ::  error
     
     call binaryToInt64Test(error)
-    if ( error ) stop
+    if ( error ) stop 1
     call binaryToInt64TrueErrorTest(error)
-    if ( error ) stop
+    if ( error ) stop 1
     call binaryCompareAsInt64Test(error)
-    if ( error ) stop
+    if ( error ) stop 1
     call binaryInt64OrSmallerTest(error)
-    if ( error ) stop
+    if ( error ) stop 1
 end program
 
 subroutine binaryToInt64Test(error)

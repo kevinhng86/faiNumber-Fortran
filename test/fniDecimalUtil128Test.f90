@@ -36,13 +36,13 @@ program fniDecimalUtilTest128
     logical  ::  error
     
     call decToInt128Test(error)
-    if ( error ) stop
+    if ( error ) stop 1
     call decToInt128TrueErrorTest(error)
-    if ( error ) stop
+    if ( error ) stop 1
     call decCompareTest128(error)
-    if ( error ) stop
+    if ( error ) stop 1
     call decInt128OrSmallerTest(error)
-    if ( error ) stop
+    if ( error ) stop 1
 end program
 
 subroutine decToInt128Test(error)

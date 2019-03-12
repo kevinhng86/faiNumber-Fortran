@@ -25,17 +25,17 @@ program fniInt32UtilTest
     logical  ::  error
     
     call int32ToBinaryAsUTest(error)
-    if ( error ) stop
+    if ( error ) stop 1
     call int32ToBinaryTest(error)
-    if ( error ) stop
+    if ( error ) stop 1
     call int32ToOctalAsUTest(error)
-    if ( error ) stop
+    if ( error ) stop 1
     call int32ToOctalTest(error)
-    if ( error ) stop
+    if ( error ) stop 1
     call int32ToHexAsUTest(error)
-    if ( error ) stop
+    if ( error ) stop 1
     call int32ToHexTest(error)
-    if ( error ) stop
+    if ( error ) stop 1
 end program
 
 subroutine int32ToBinaryAsUTest(error)

@@ -24,17 +24,17 @@ program fniInt64UtilTest
     logical  ::  error
     
     call int64ToBinaryAsUTest(error)
-    if ( error ) stop
+    if ( error ) stop 1
     call int64ToBinaryTest(error)
-    if ( error ) stop
+    if ( error ) stop 1
     call int64ToOctalAsUTest(error)
-    if ( error ) stop
+    if ( error ) stop 1
     call int64ToOctalTest(error)
-    if ( error ) stop
+    if ( error ) stop 1
     call int64ToHexAsUTest(error)
-    if ( error ) stop
+    if ( error ) stop 1
     call int64ToHexTest(error)
-    if ( error ) stop
+    if ( error ) stop 1
 end program
 
 subroutine int64ToBinaryAsUTest(error)
