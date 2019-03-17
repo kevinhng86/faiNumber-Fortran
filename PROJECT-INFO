@@ -1,5 +1,6 @@
 project: faiNumber-Fortran
-license: custom|||MIT|||https://github.com/kevinhng86/faiNumber-Fortran/blob/master/LICENSE
+license: custom|||MIT|||https://github.com/kevinhng86/faiNumber-Fortran/blob/v1/LICENSE
+doc_license: custom|||fai.host|||https://fai.host
 summary: A fast, flexible, and secure numerical library for Fortran.
 author: Khang Hoang Nguyen
 facebook: https://www.facebook.com/kevin.ng.142035
@@ -13,8 +14,16 @@ src_dir: ./src
 page_dir: ./
 page_dir_recursive: false
 page_index: .docGenIndex
+html_minify: true
+page_extension: html
+copy_assets: false
 doc_asset_url: /change/this/to/url
 project_url: /change/this/to/url
+privacy_policy_link: /change/this/to/url
+terms_of_service_link: /change/this/to/url
+branding: <b>FAI</b>Fortran Library
+branding_short: FAI
+branding_url: /change/this/to/url
 
 ## Description
 
